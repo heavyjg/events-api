@@ -16,7 +16,6 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: eu-west-1
-  stage: ${opt:stage}
   timeout: 30 # repository wide Lambda timeout
   environment: # repository wide Lambda env variables
     STAGE: ${self:provider.stage}
