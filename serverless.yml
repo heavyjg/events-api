@@ -1,0 +1,24 @@
+org: joaogoncalves
+app: events-api
+service: events-api
+frameworkVersion: "3"
+
+custom:
+  prefix: ${self:service}-${self:provider.stage}
+  customVariable1: Hello, World!
+  tableName: "events-table-${sls:stage}"
+
+plugins:
+  - serverless-esbuild # used for compiling/packaging the Typescript code
+  - serverless-offline # used for local execution
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-west-1
+  stage: ${opt:stage}
+  timeout: 30 # repository wide Lambda timeout
+  environment: # repository wide Lambda env variables
+    STAGE: ${self:provider.stage}
+
+functions: ${file(./resources/functions.yml)}

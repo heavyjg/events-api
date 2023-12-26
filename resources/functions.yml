@@ -1,0 +1,6 @@
+# Serverless Framework specific syntax
+
+api:
+  handler: src/events/index.handler
+  events:
+    - httpApi: "*"
