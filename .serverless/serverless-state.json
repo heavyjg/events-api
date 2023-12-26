@@ -102,27 +102,16 @@
                   {
                     "Effect": "Allow",
                     "Principal": {
-                      "Service": [
-                        "lambda.amazonaws.com"
-                      ]
+                      "Service": ["lambda.amazonaws.com"]
                     },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
+                    "Action": ["sts:AssumeRole"]
                   }
                 ]
               },
               "Policies": [
                 {
                   "PolicyName": {
-                    "Fn::Join": [
-                      "-",
-                      [
-                        "events-api",
-                        "dev",
-                        "lambda"
-                      ]
-                    ]
+                    "Fn::Join": ["-", ["events-api", "dev", "lambda"]]
                   },
                   "PolicyDocument": {
                     "Version": "2012-10-17",
@@ -142,9 +131,7 @@
                       },
                       {
                         "Effect": "Allow",
-                        "Action": [
-                          "logs:PutLogEvents"
-                        ],
+                        "Action": ["logs:PutLogEvents"],
                         "Resource": [
                           {
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/events-api-dev*:*:*"
@@ -199,15 +186,10 @@
                     "Statement": [
                       {
                         "Effect": "Allow",
-                        "Action": [
-                          "logs:FilterLogEvents"
-                        ],
+                        "Action": ["logs:FilterLogEvents"],
                         "Resource": [
                           {
-                            "Fn::GetAtt": [
-                              "ApiLogGroup",
-                              "Arn"
-                            ]
+                            "Fn::GetAtt": ["ApiLogGroup", "Arn"]
                           }
                         ]
                       }
@@ -237,15 +219,10 @@
                 }
               },
               "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
+                "Fn::GetAtt": ["IamRoleLambdaExecution", "Arn"]
               }
             },
-            "DependsOn": [
-              "ApiLogGroup"
-            ]
+            "DependsOn": ["ApiLogGroup"]
           },
           "ApiLambdaVersioncocbx5m9OeOJbZ7KEqRVNqPZU74FNsgTOxyyTLOfCM": {
             "Type": "AWS::Lambda::Version",
@@ -283,10 +260,7 @@
               },
               "AccessLogSettings": {
                 "DestinationArn": {
-                  "Fn::GetAtt": [
-                    "HttpApiLogGroup",
-                    "Arn"
-                  ]
+                  "Fn::GetAtt": ["HttpApiLogGroup", "Arn"]
                 },
                 "Format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourcePath\":\"$context.routeKey\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"stage\":\"$context.stage\",\"status\":\"$context.status\",\"integrationStatus\":\"$context.integrationStatus\",\"integrationLatency\":\"$context.integrationLatency\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_HTTP_API_LOG\",\"version\":\"1.0.0\"}"
               }
@@ -297,10 +271,7 @@
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
-                "Fn::GetAtt": [
-                  "ApiLambdaFunction",
-                  "Arn"
-                ]
+                "Fn::GetAtt": ["ApiLambdaFunction", "Arn"]
               },
               "Action": "lambda:InvokeFunction",
               "Principal": "apigateway.amazonaws.com",
@@ -377,10 +348,7 @@
           },
           "EnterpriseLogAccessIamRole": {
             "Value": {
-              "Fn::GetAtt": [
-                "EnterpriseLogAccessIamRole",
-                "Arn"
-              ]
+              "Fn::GetAtt": ["EnterpriseLogAccessIamRole", "Arn"]
             },
             "Export": {
               "Name": "sls-events-api-dev-EnterpriseLogAccessIamRole"
@@ -525,10 +493,7 @@
       "customVariable1": "Hello, World!",
       "tableName": "events-table-dev"
     },
-    "plugins": [
-      "serverless-esbuild",
-      "serverless-offline"
-    ],
+    "plugins": ["serverless-esbuild", "serverless-offline"],
     "pluginsData": {},
     "functions": {
       "api": {

@@ -1,4 +1,3 @@
-
 # Events API - Serverless Guru Challenge
 
 This project is the artifact of a code challenge.
