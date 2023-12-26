@@ -11,13 +11,32 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/", (_req, res) => {
-  res.send("Hello, Lambda 1!");
+type Event = {
+  eventId: string;
+  name: string;
+};
+
+const mockEvents: Event[] = [
+  { eventId: "", name: "" },
+  { eventId: "1", name: "Event One" },
+  { eventId: "2", name: "Event Two" },
+  // Add more mock events as needed
+];
+
+app.get("/events/:eventId", async function (req, res) {
+  const eventId: number = req.params.eventId as unknown as number;
+  const event: Event = mockEvents[eventId];
+
+  if (event) {
+    res.json(event);
+  } else {
+    res
+      .status(404)
+      .json({ error: 'Could not find event with provided "eventId"' });
+  }
 });
 
-app.get("/custom-var", (_req, res) => {
-  res.send(process.env.CUSTOM_VAR || "No custom variable set");
-});
+export default app;
 
 const lambdaHandler = serverless(app);
 
