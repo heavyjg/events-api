@@ -4,7 +4,6 @@ service: events-api
 frameworkVersion: "3"
 
 custom:
-  prefix: ${self:service}-${self:provider.stage}
   customVariable1: Hello, World!
   tableName: "events-table-${sls:stage}"
 
@@ -16,8 +15,5 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: eu-west-1
-  timeout: 30 # repository wide Lambda timeout
-  environment: # repository wide Lambda env variables
-    STAGE: ${self:provider.stage}
 
 functions: ${file(./resources/functions.yml)}

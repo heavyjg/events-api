@@ -1,4 +1,6 @@
 import type {
+  Context,
+  Handler,
   APIGatewayProxyEventV2,
   APIGatewayProxyStructuredResultV2,
 } from "aws-lambda";
@@ -19,9 +21,9 @@ app.get("/custom-var", (_req, res) => {
 
 const lambdaHandler = serverless(app);
 
-export const handler = async (
+export const handler: Handler = async (
   event: APIGatewayProxyEventV2,
-  context: any
+  context: Context
 ): Promise<APIGatewayProxyStructuredResultV2> => {
   return lambdaHandler(event, context);
 };
