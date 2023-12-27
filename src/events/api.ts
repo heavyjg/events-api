@@ -7,29 +7,14 @@ import type {
 import type { Event } from "./types";
 import express from "express";
 import serverless from "serverless-http";
+import { saveEvent, getEvent } from "./eventsController";
 
 const app = express();
 app.use(express.json());
 
-const mockEvents: Event[] = [
-  { eventId: "", name: "" },
-  { eventId: "1", name: "Event One" },
-  { eventId: "2", name: "Event Two" },
-  // Add more mock events as needed
-];
+app.get("/events/:eventId", getEvent);
 
-app.get("/events/:eventId", async function (req, res) {
-  const eventId: number = req.params.eventId as unknown as number;
-  const event: Event = mockEvents[eventId];
-
-  if (event) {
-    res.json(event);
-  } else {
-    res
-      .status(404)
-      .json({ error: 'Could not find event with provided "eventId"' });
-  }
-});
+app.post("/events", saveEvent);
 
 export default app;
 
