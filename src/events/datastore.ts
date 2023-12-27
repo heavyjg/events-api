@@ -1,6 +1,6 @@
 import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
-import type { Event } from "../events/types";
-import { EVENT_KEY } from "../events/types";
+import type { Event } from "./types";
+import { EVENT_KEY } from "./types";
 import { getDdbDocumentClient } from "../aws/aws";
 
 const EventsDB = () => {
@@ -30,10 +30,9 @@ const EventsDB = () => {
     try {
       const { Item } = await ddbDocumentClient.send(new GetCommand(params));
       if (Item) {
-        const { eventId, name } = Item;
-        return { eventId: eventId, name: name };
+        return Item;
       } else {
-        return { error: 'Could not find event with provided "eventId"' };
+        return undefined;
       }
     } catch (error) {
       console.log(error);

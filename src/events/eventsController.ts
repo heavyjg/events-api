@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import EventsDB from "../datastore/ddbEvents";
+import EventsDB from "./datastore";
 import type { Event } from "./types";
 import { v4 as uuidv4 } from "uuid";
 const { save, get } = EventsDB();
