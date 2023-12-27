@@ -5,9 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 const { save, get } = EventsDB();
 
 export async function getEvent(request: Request, response: Response) {
-  //validate the note
   const eventId = request.params.eventId;
-  // console.log(reqBody);
   if (eventId == null) {
     response.statusCode = 400;
     response.send("Error: missing eventId");
@@ -21,9 +19,8 @@ export async function getEvent(request: Request, response: Response) {
 }
 
 export async function saveEvent(request: Request, response: Response) {
-  //validate the note
   const reqBody = request.body;
-  // console.log(reqBody);
+
   if (reqBody == null) {
     response.statusCode = 400;
     response.send("Error: a note create request must have a body");
