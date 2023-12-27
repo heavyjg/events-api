@@ -1,16 +1,9 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import {
-  DynamoDBDocumentClient,
-  GetCommand,
-  PutCommand,
-} from "@aws-sdk/lib-dynamodb";
+import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 import type { Event } from "../events/types";
 import { EVENT_KEY } from "../events/types";
+import { ddbDocumentClient } from "../aws/aws";
 
 const EventsDB = () => {
-  const ddb = new DynamoDBClient({});
-  const documentClient = DynamoDBDocumentClient.from(ddb);
-
   const saveEventToAWS = async (event: Event) => {
     const params = {
       TableName: EVENT_KEY,
@@ -18,7 +11,7 @@ const EventsDB = () => {
     };
 
     try {
-      return await documentClient.send(new PutCommand(params));
+      return await ddbDocumentClient.send(new PutCommand(params));
     } catch (error) {
       return error;
     }
@@ -33,7 +26,7 @@ const EventsDB = () => {
     };
 
     try {
-      const { Item } = await documentClient.send(new GetCommand(params));
+      const { Item } = await ddbDocumentClient.send(new GetCommand(params));
       if (Item) {
         const { eventId, name } = Item;
         return { eventId: eventId, name: name };
