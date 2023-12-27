@@ -35,7 +35,6 @@ const EventsDB = () => {
         return undefined;
       }
     } catch (error) {
-      console.log(error);
       return { error };
     }
   };

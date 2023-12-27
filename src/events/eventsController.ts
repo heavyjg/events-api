@@ -7,15 +7,29 @@ const { save, get } = EventsDB();
 export async function getEvent(request: Request, response: Response) {
   const eventId = request.params.eventId;
   if (eventId == null) {
-    response.statusCode = 400;
-    response.send("Error: missing eventId");
+    response.status(400).send("Error: missing eventId");
     return;
   }
 
-  const event = await get(eventId);
-  console.log({ event });
-  response.statusCode = 200;
-  response.json(event);
+  try {
+    const event = await get(eventId);
+
+    if (!event) {
+      // Handle undefined (event not found) case
+      response.status(404).json({ error: "Event not found" });
+    } else if ("error" in event) {
+      // Handle error case
+      response
+        .status(500)
+        .json({ error: "An error occurred while retrieving the event" });
+    } else {
+      // Success case
+      response.status(200).json(event);
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).send("Internal Server Error");
+  }
 }
 
 export async function saveEvent(request: Request, response: Response) {

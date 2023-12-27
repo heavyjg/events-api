@@ -2,18 +2,26 @@
 import { mockClient } from "aws-sdk-client-mock";
 import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
 import assert from "node:assert";
-import test from "node:test";
+import test, { beforeEach } from "node:test";
 import app from "./api";
 import request from "supertest";
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
-ddbMock.on(GetCommand).resolves({
-  Item: { eventId: "28899ee7-b841-4da6-81e2-b9054c091a79", name: "Event One" },
+
+beforeEach(() => {
+  ddbMock.reset();
 });
 
 test("GET /events/:eventId - success", async () => {
+  ddbMock.on(GetCommand).resolves({
+    Item: {
+      eventId: "28899ee7-b841-4da6-81e2-b9054c091a79",
+      name: "Event One",
+    },
+  });
+
   const res = await request(app).get(
-    "/events/28899ee7-b841-4da6-81e2-b9054c091a79",
+    "/events/28899ee7-b841-4da6-81e2-b9054c091a79"
   );
 
   // Assertions
@@ -22,8 +30,12 @@ test("GET /events/:eventId - success", async () => {
   assert.strictEqual(res.body.name, "Event One");
 });
 
-// test("GET /events/:eventId - not found", async () => {
-//   const res = await request(app).get("/events/999");
+test("GET /events/:eventId - not found", async () => {
+  ddbMock.on(GetCommand).resolves({
+    Item: undefined,
+  });
 
-//   assert.strictEqual(res.statusCode, 404);
-// });
+  const res = await request(app).get("/events/999");
+
+  assert.strictEqual(res.statusCode, 404);
+});
