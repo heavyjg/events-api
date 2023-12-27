@@ -5,10 +5,19 @@ frameworkVersion: "3"
 
 custom:
   tableName: "events-table-${sls:stage}"
+  serverless-dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      docker: false
 
 plugins:
-  - serverless-esbuild # used for compiling/packaging the Typescript code
   - serverless-offline # used for local execution
+  - serverless-esbuild # used for compiling/packaging the Typescript code
+  - serverless-dynamodb
 
 provider:
   name: aws
