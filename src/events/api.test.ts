@@ -21,7 +21,7 @@ test("GET /events/:eventId - success", async () => {
   });
 
   const res = await request(app).get(
-    "/events/28899ee7-b841-4da6-81e2-b9054c091a79"
+    "/events/28899ee7-b841-4da6-81e2-b9054c091a79",
   );
 
   // Assertions
