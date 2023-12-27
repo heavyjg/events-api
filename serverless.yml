@@ -4,7 +4,6 @@ service: events-api
 frameworkVersion: "3"
 
 custom:
-  customVariable1: Hello, World!
   tableName: "events-table-${sls:stage}"
 
 plugins:
@@ -14,6 +13,34 @@ plugins:
 provider:
   name: aws
   runtime: nodejs18.x
-  region: eu-west-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [EventsTable, Arn]
+  environment:
+    EVENTS_TABLE: ${self:custom.tableName}
 
 functions: ${file(./resources/functions.yml)}
+
+resources:
+  Resources:
+    EventsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: eventId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: eventId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.tableName}
