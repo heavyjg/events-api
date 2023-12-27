@@ -1,9 +1,11 @@
 import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 import type { Event } from "../events/types";
 import { EVENT_KEY } from "../events/types";
-import { ddbDocumentClient } from "../aws/aws";
+import { getDdbDocumentClient } from "../aws/aws";
 
 const EventsDB = () => {
+  const ddbDocumentClient = getDdbDocumentClient();
+
   const saveEventToAWS = async (event: Event) => {
     const params = {
       TableName: EVENT_KEY,
