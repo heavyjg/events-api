@@ -1,3 +1,5 @@
+import { GetCommandOutput } from "@aws-sdk/lib-dynamodb";
+
 export const EVENT_KEY = process.env.EVENTS_TABLE as string;
 
 export type Event = {
@@ -12,4 +14,8 @@ export type Event = {
   ticketPrice?: number; // Optional ticket price for the event
   tags?: string[]; // Optional list of tags or keywords associated with the event
   status?: string; // Optional current status of the event (scheduled, cancelled, etc.)
+};
+
+export type IGetCommandOutput<T> = Omit<GetCommandOutput, "Item"> & {
+  Item?: T;
 };

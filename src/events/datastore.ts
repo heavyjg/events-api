@@ -1,6 +1,6 @@
 import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
-import type { Event } from "./types";
-import { EVENT_KEY } from "./types";
+import type { Event, IGetCommandOutput } from "../types";
+import { EVENT_KEY } from "../types";
 import { getDdbDocumentClient } from "../aws/aws";
 
 const EventsDB = () => {
@@ -28,9 +28,12 @@ const EventsDB = () => {
     };
 
     try {
-      const { Item } = await ddbDocumentClient.send(new GetCommand(params));
-      if (Item) {
-        return Item;
+      const { Item: Event } = (await ddbDocumentClient.send(
+        new GetCommand(params)
+      )) as IGetCommandOutput<Event>;
+
+      if (Event) {
+        return Event;
       } else {
         return undefined;
       }
