@@ -32,17 +32,51 @@ export async function getEvent(request: Request, response: Response) {
 export async function saveEvent(request: Request, response: Response) {
   const reqBody = request.body;
 
-  if (reqBody == null) {
-    response.statusCode = 400;
-    response.send("Error: a note create request must have a body");
+  // Basic validation for request body existence
+  if (!reqBody || typeof reqBody !== "object") {
+    response.status(400).send("Error: Invalid request body");
     return;
   }
 
-  const event = reqBody as Event;
+  // Validating mandatory fields
+  const requiredFields = [
+    "eventName",
+    "eventType",
+    "eventDate",
+    "location",
+    "host",
+  ];
+  const missingFields = requiredFields.filter((field) => !reqBody[field]);
 
-  event.eventId = uuidv4();
+  if (missingFields.length > 0) {
+    response
+      .status(400)
+      .send(`Error: Missing required fields: ${missingFields.join(", ")}`);
+    return;
+  }
 
-  await save(event);
-  response.statusCode = 201;
-  response.send(event);
+  // Constructing an event object with validation
+  const event: Event = {
+    eventId: uuidv4(), // Generate a new UUID for the event
+    eventName: reqBody.eventName,
+    eventType: reqBody.eventType,
+    eventDate: reqBody.eventDate,
+    location: reqBody.location,
+    host: reqBody.host,
+    description: reqBody.description,
+    capacity: reqBody.capacity,
+    ticketPrice: reqBody.ticketPrice,
+    tags: reqBody.tags,
+    status: reqBody.status || "scheduled", // Assuming 'scheduled' as default status
+  };
+
+  // Additional validation can be added here if needed
+
+  try {
+    await save(event);
+    response.status(201).json(event);
+  } catch (error) {
+    console.error(error);
+    response.status(500).send("Internal Server Error");
+  }
 }
