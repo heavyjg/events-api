@@ -35,7 +35,7 @@ test("GET /events/:eventId - success", async () => {
   ddbMock.on(GetCommand).resolves({ Item: mockEvent });
 
   const res = await request(app).get(
-    "/events/28899ee7-b841-4da6-81e2-b9054c091a79"
+    "/events/28899ee7-b841-4da6-81e2-b9054c091a79",
   );
 
   // Assertions
@@ -92,6 +92,6 @@ test("POST /events - fail", async () => {
   assert.strictEqual(response.statusCode, 400);
   assert.strictEqual(
     response.text,
-    "Error: Missing required fields: eventName"
+    "Error: Missing required fields: eventName",
   );
 });
