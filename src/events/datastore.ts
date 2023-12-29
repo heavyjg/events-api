@@ -20,7 +20,7 @@ const EventsDB = () => {
   };
 
   const getEventFromAWS = async (
-    eventId: string
+    eventId: string,
   ): Promise<Event | undefined> => {
     const params = {
       TableName: EVENT_KEY,
@@ -30,7 +30,7 @@ const EventsDB = () => {
     };
 
     const { Item: event } = (await ddbDocumentClient.send(
-      new GetCommand(params)
+      new GetCommand(params),
     )) as IGetCommandOutput<Event>;
 
     return event;

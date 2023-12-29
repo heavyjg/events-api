@@ -21,7 +21,7 @@ const lambdaHandler = serverless(app);
 
 export const handler: Handler = async (
   event: APIGatewayProxyEventV2,
-  context: Context
+  context: Context,
 ): Promise<APIGatewayProxyStructuredResultV2> => {
   return lambdaHandler(event, context);
 };
