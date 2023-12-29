@@ -4,7 +4,6 @@ import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyStructuredResultV2,
 } from "aws-lambda";
-import type { Event } from "../types";
 import express from "express";
 import serverless from "serverless-http";
 import { saveEvent, getEvent } from "./eventsController";

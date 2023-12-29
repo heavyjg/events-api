@@ -19,7 +19,9 @@ const EventsDB = () => {
     }
   };
 
-  const getEventFromAWS = async (eventId: string) => {
+  const getEventFromAWS = async (
+    eventId: string
+  ): Promise<Event | undefined> => {
     const params = {
       TableName: EVENT_KEY,
       Key: {
@@ -27,26 +29,18 @@ const EventsDB = () => {
       },
     };
 
-    try {
-      const { Item: Event } = (await ddbDocumentClient.send(
-        new GetCommand(params)
-      )) as IGetCommandOutput<Event>;
+    const { Item: event } = (await ddbDocumentClient.send(
+      new GetCommand(params)
+    )) as IGetCommandOutput<Event>;
 
-      if (Event) {
-        return Event;
-      } else {
-        return undefined;
-      }
-    } catch (error) {
-      return { error };
-    }
+    return event;
   };
 
   const save = async (event: Event) => {
     await saveEventToAWS(event);
   };
 
-  const get = async (eventId: string) => {
+  const get = async (eventId: string): Promise<Event | undefined> => {
     return await getEventFromAWS(eventId);
   };
 

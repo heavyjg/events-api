@@ -12,19 +12,16 @@ export async function getEvent(request: Request, response: Response) {
   }
 
   try {
-    const event = await get(eventId);
+    const result: Event | undefined = await get(eventId);
 
-    if (!event) {
-      // Handle undefined (event not found) case
+    if (!result) {
       response.status(404).json({ error: "Event not found" });
-    } else if ("error" in event) {
-      // Handle error case
-      response
-        .status(500)
-        .json({ error: "An error occurred while retrieving the event" });
+    } else if ("error" in result) {
+      response.status(500).json({
+        error: "An error occurred while retrieving the event",
+      });
     } else {
-      // Success case
-      response.status(200).json(event);
+      response.status(200).json(result);
     }
   } catch (error) {
     console.error(error);
