@@ -145,6 +145,25 @@ test("POST /events - success", async () => {
 
   assert.strictEqual(response.statusCode, 201);
   assert.notEqual(response.body.eventId, mockEvent.eventId);
+
+  mockEvent.eventId = response.body.eventId;
+  assert.deepStrictEqual(
+    response.body,
+    {
+      eventId: mockEvent.eventId,
+      eventName: mockEvent.eventName,
+      eventType: mockEvent.eventType,
+      eventDate: mockEvent.eventDate,
+      location: mockEvent.location,
+      host: mockEvent.host,
+      ...(mockEvent.description && { description: mockEvent.description }),
+      ...(mockEvent.capacity && { capacity: mockEvent.capacity }),
+      ...(mockEvent.ticketPrice && { ticketPrice: mockEvent.ticketPrice }),
+      ...(mockEvent.tags && { tags: mockEvent.tags }),
+      ...(mockEvent.status && { status: mockEvent.status }),
+    },
+    "Response body should match the mock event structure and data"
+  );
 });
 
 test("POST /events - fail", async () => {
