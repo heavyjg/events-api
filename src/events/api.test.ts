@@ -39,32 +39,28 @@ test("GET /events/:eventId - success", async () => {
   ddbMock.on(GetCommand).resolves({ Item: mockEvent });
 
   const res = await request(app).get(
-    "/events/28899ee7-b841-4da6-81e2-b9054c091a79",
+    "/events/28899ee7-b841-4da6-81e2-b9054c091a79"
   );
 
   // Assertions
-  assert.strictEqual(res.statusCode, 200);
-  assert.strictEqual(res.body.eventId, mockEvent.eventId);
-  assert.strictEqual(res.body.eventName, mockEvent.eventName);
-  assert.strictEqual(res.body.eventType, mockEvent.eventType);
-  assert.strictEqual(res.body.eventDate, mockEvent.eventDate);
-  assert.strictEqual(res.body.location, mockEvent.location);
-  assert.strictEqual(res.body.host, mockEvent.host);
-  if (mockEvent.description) {
-    assert.strictEqual(res.body.description, mockEvent.description);
-  }
-  if (mockEvent.capacity) {
-    assert.strictEqual(res.body.capacity, mockEvent.capacity);
-  }
-  if (mockEvent.ticketPrice) {
-    assert.strictEqual(res.body.ticketPrice, mockEvent.ticketPrice);
-  }
-  if (mockEvent.tags) {
-    assert.deepStrictEqual(res.body.tags, mockEvent.tags);
-  }
-  if (mockEvent.status) {
-    assert.strictEqual(res.body.status, mockEvent.status);
-  }
+  assert.strictEqual(res.statusCode, 200, "Response status code should be 200");
+  assert.deepStrictEqual(
+    res.body,
+    {
+      eventId: mockEvent.eventId,
+      eventName: mockEvent.eventName,
+      eventType: mockEvent.eventType,
+      eventDate: mockEvent.eventDate,
+      location: mockEvent.location,
+      host: mockEvent.host,
+      ...(mockEvent.description && { description: mockEvent.description }),
+      ...(mockEvent.capacity && { capacity: mockEvent.capacity }),
+      ...(mockEvent.ticketPrice && { ticketPrice: mockEvent.ticketPrice }),
+      ...(mockEvent.tags && { tags: mockEvent.tags }),
+      ...(mockEvent.status && { status: mockEvent.status }),
+    },
+    "Response body should match the mock event structure and data"
+  );
 });
 
 test("GET /events/:eventId - not found", async () => {
@@ -78,7 +74,7 @@ test("GET /events/:eventId - not found", async () => {
   assert.strictEqual(res.body.error, "Event not found");
 });
 
-test("GET /events - retrieve all events successfully", async () => {
+test("GET ALL /events - retrieve all events successfully", async () => {
   // Create a list of mock events
   const mockEvents = Array.from({ length: 5 }, () => generateFakeEvent());
 
@@ -89,6 +85,26 @@ test("GET /events - retrieve all events successfully", async () => {
   assert.strictEqual(res.statusCode, 200);
   assert.strictEqual(res.body.length, mockEvents.length);
   mockEvents.forEach((event, index) => {
+    const currentEvent = res.body[index];
+
+    assert.deepStrictEqual(
+      currentEvent,
+      {
+        eventId: event.eventId,
+        eventName: event.eventName,
+        eventType: event.eventType,
+        eventDate: event.eventDate,
+        location: event.location,
+        host: event.host,
+        ...(event.description && { description: event.description }),
+        ...(event.capacity && { capacity: event.capacity }),
+        ...(event.ticketPrice && { ticketPrice: event.ticketPrice }),
+        ...(event.tags && { tags: event.tags }),
+        ...(event.status && { status: event.status }),
+      },
+      "Response body should match the mock event structure and data"
+    );
+
     assert.strictEqual(res.body[index].eventId, event.eventId);
     assert.strictEqual(res.body[index].eventName, event.eventName);
     assert.strictEqual(res.body[index].eventType, event.eventType);
@@ -140,6 +156,6 @@ test("POST /events - fail", async () => {
   assert.strictEqual(response.statusCode, 400);
   assert.strictEqual(
     response.text,
-    "Error: Missing required fields: eventName",
+    "Error: Missing required fields: eventName"
   );
 });
