@@ -53,7 +53,7 @@ const EventsDB = () => {
   const updateEventInAWS = async (
     eventId: string,
     updatedFields: Partial<Event>
-  ): Promise<Event | undefined> => {
+  ) => {
     // Build the update expression and attribute values based on what's provided
     let updateExpression = "set";
     const expressionAttributeValues: { [key: string]: AttributeValue } = {};
@@ -99,11 +99,8 @@ const EventsDB = () => {
       ReturnValues: "UPDATED_NEW" as ReturnValue,
     };
 
-    const { Attributes: result } = (await ddbDocumentClient.send(
-      new UpdateCommand(params)
-    )) as IUpdateCommandOutput<Event>;
-
-    return result;
+    await ddbDocumentClient.send(new UpdateCommand(params));
+    return;
   };
 
   const save = async (event: Event): Promise<Event | undefined> => {
@@ -114,11 +111,8 @@ const EventsDB = () => {
     return await getEventFromAWS(eventId);
   };
 
-  const update = async (
-    eventId: string,
-    event: Event
-  ): Promise<Event | undefined> => {
-    return await updateEventInAWS(eventId, event);
+  const update = async (eventId: string, event: Event) => {
+    await updateEventInAWS(eventId, event);
   };
 
   const getAll = async (): Promise<Event[] | undefined> => {

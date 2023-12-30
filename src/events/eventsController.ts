@@ -111,8 +111,8 @@ export async function updateEvent(request: Request, response: Response) {
   };
 
   try {
-    const result = await update(eventId, event);
-    response.status(201).json(result);
+    await update(eventId, event);
+    response.status(204).send();
   } catch (error) {
     console.error(error);
     response.status(500).send("Internal Server Error");
