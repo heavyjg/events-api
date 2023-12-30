@@ -39,7 +39,7 @@ test("GET /events/:eventId - success", async () => {
   ddbMock.on(GetCommand).resolves({ Item: mockEvent });
 
   const res = await request(app).get(
-    "/events/28899ee7-b841-4da6-81e2-b9054c091a79"
+    "/events/28899ee7-b841-4da6-81e2-b9054c091a79",
   );
 
   // Assertions
@@ -59,7 +59,7 @@ test("GET /events/:eventId - success", async () => {
       ...(mockEvent.tags && { tags: mockEvent.tags }),
       ...(mockEvent.status && { status: mockEvent.status }),
     },
-    "Response body should match the mock event structure and data"
+    "Response body should match the mock event structure and data",
   );
 });
 
@@ -102,7 +102,7 @@ test("GET ALL /events - retrieve all events successfully", async () => {
         ...(event.tags && { tags: event.tags }),
         ...(event.status && { status: event.status }),
       },
-      "Response body should match the mock event structure and data"
+      "Response body should match the mock event structure and data",
     );
 
     assert.strictEqual(res.body[index].eventId, event.eventId);
@@ -129,7 +129,7 @@ test("GET ALL /events - retrieve all events successfully", async () => {
   });
 });
 
-test("GET /events - handle empty list", async () => {
+test("GET ALL /events - handle empty list", async () => {
   ddbMock.on(ScanCommand).resolves({ Items: [] });
 
   const response = await request(app).get("/events");
@@ -162,7 +162,7 @@ test("POST /events - success", async () => {
       ...(mockEvent.tags && { tags: mockEvent.tags }),
       ...(mockEvent.status && { status: mockEvent.status }),
     },
-    "Response body should match the mock event structure and data"
+    "Response body should match the mock event structure and data",
   );
 });
 
@@ -175,6 +175,36 @@ test("POST /events - fail", async () => {
   assert.strictEqual(response.statusCode, 400);
   assert.strictEqual(
     response.text,
-    "Error: Missing required fields: eventName"
+    "Error: Missing required fields: eventName",
   );
+});
+
+test("PUT /events/:eventId - success", { only: true }, async () => {
+  const mockEvent = generateFakeEvent();
+  const postResponse = await request(app).post("/events").send(mockEvent);
+  assert.strictEqual(postResponse.statusCode, 201);
+
+  // Assign the eventId from the POST response to the mock event
+  mockEvent.eventId = postResponse.body.eventId;
+
+  // Now, update the mock event with new data
+  const updatedEvent = {
+    ...mockEvent,
+    eventName: "Updated Event Name",
+  };
+
+  console.log("antes do put");
+  // Send a PUT request to update the event
+  const response = await request(app)
+    .put(`/events/${mockEvent.eventId}`)
+    .send(updatedEvent);
+  console.log("depois do put");
+
+  // Assertions for PUT request
+  assert.strictEqual(
+    response.statusCode,
+    204,
+    "Response status code should be 200",
+  );
+  console.log("depois do assertion");
 });
