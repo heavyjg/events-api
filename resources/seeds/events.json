@@ -1,172 +1,132 @@
 [
-    {
-        "eventId": "1",
-        "eventName": "Summer Music Festival",
-        "eventType": "Concert",
-        "eventDate": "2023-07-15T20:00:00Z",
-        "location": "Central Park",
-        "host": "Music Events Ltd.",
-        "description": "An outdoor summer music festival featuring top bands.",
-        "capacity": 5000,
-        "ticketPrice": 49.99,
-        "tags": [
-            "music",
-            "summer",
-            "outdoor"
-        ],
-        "status": "scheduled"
-    },
-    {
-        "eventId": "2",
-        "eventName": "Tech Conference 2023",
-        "eventType": "Conference",
-        "eventDate": "2023-09-10T09:00:00Z",
-        "location": "Tech Convention Center",
-        "host": "InnovateX",
-        "description": "Annual technology conference with keynotes from industry leaders.",
-        "capacity": 3000,
-        "ticketPrice": 399.99,
-        "tags": [
-            "technology",
-            "innovation",
-            "networking"
-        ],
-        "status": "scheduled"
-    },
-    {
-        "eventId": "3",
-        "eventName": "City Marathon",
-        "eventType": "Sports",
-        "eventDate": "2023-10-05T06:00:00Z",
-        "location": "City Streets",
-        "host": "City Sports Association",
-        "description": "A marathon through the city's most scenic routes.",
-        "capacity": 10000,
-        "ticketPrice": 0,
-        "tags": [
-            "sports",
-            "running",
-            "health"
-        ],
-        "status": "scheduled"
-    },
-    {
-        "eventId": "4",
-        "eventName": "Local Food Fair",
-        "eventType": "Festival",
-        "eventDate": "2023-08-21T11:00:00Z",
-        "location": "Downtown Market",
-        "host": "Foodie Group",
-        "description": "Explore local cuisines and gourmet food from top chefs.",
-        "capacity": 2000,
-        "ticketPrice": 25.00,
-        "tags": [
-            "food",
-            "gourmet",
-            "local"
-        ],
-        "status": "scheduled"
-    },
-    {
-        "eventId": "5",
-        "eventName": "Charity Ball Gala",
-        "eventType": "Social",
-        "eventDate": "2023-12-01T19:00:00Z",
-        "location": "Grand Hotel Ballroom",
-        "host": "Charity Foundation",
-        "description": "An elegant evening of dining and dancing in support of local charities.",
-        "capacity": 500,
-        "ticketPrice": 150.00,
-        "tags": [
-            "charity",
-            "gala",
-            "elegant"
-        ],
-        "status": "scheduled"
-    },
-    {
-        "eventId": "6",
-        "eventName": "Jazz Night Downtown",
-        "eventType": "Concert",
-        "eventDate": "2023-09-25T20:00:00Z",
-        "location": "Riverfront Jazz Club",
-        "host": "Jazz Enthusiasts Club",
-        "description": "A night of classic and contemporary jazz music by renowned artists.",
-        "capacity": 300,
-        "ticketPrice": 40.00,
-        "tags": [
-            "music",
-            "jazz",
-            "nightlife"
-        ],
-        "status": "scheduled"
-    },
-    {
-        "eventId": "7",
-        "eventName": "Art & Wine Weekend",
-        "eventType": "Exhibition",
-        "eventDate": "2023-11-11T10:00:00Z",
-        "location": "City Art Gallery",
-        "host": "Art Lovers Association",
-        "description": "A weekend of fine arts display and wine tasting sessions.",
-        "capacity": 800,
-        "ticketPrice": 60.00,
-        "tags": [
-            "art",
-            "wine",
-            "exhibition"
-        ],
-        "status": "scheduled"
-    },
-    {
-        "eventId": "8",
-        "eventName": "Book Launch: 'Journeys Through Time'",
-        "eventType": "Cultural",
-        "eventDate": "2023-10-15T17:00:00Z",
-        "location": "The Literary Cafe",
-        "host": "Author John Smith",
-        "description": "Book launch and signing event by bestselling author John Smith.",
-        "capacity": 200,
-        "ticketPrice": 20.00,
-        "tags": [
-            "book",
-            "launch",
-            "author"
-        ],
-        "status": "scheduled"
-    },
-    {
-        "eventId": "9",
-        "eventName": "Outdoor Yoga Retreat",
-        "eventType": "Health",
-        "eventDate": "2023-06-20T07:00:00Z",
-        "location": "Sunny Meadows Park",
-        "host": "Yoga Life",
-        "description": "A weekend retreat focusing on yoga, meditation, and wellness.",
-        "capacity": 150,
-        "ticketPrice": 100.00,
-        "tags": [
-            "yoga",
-            "health",
-            "retreat"
-        ],
-        "status": "scheduled"
-    },
-    {
-        "eventId": "10",
-        "eventName": "Indie Film Festival",
-        "eventType": "Entertainment",
-        "eventDate": "2023-08-05T12:00:00Z",
-        "location": "Downtown Cinema",
-        "host": "Indie Film Society",
-        "description": "Showcasing the best of independent films from around the world.",
-        "capacity": 1000,
-        "ticketPrice": 30.00,
-        "tags": [
-            "film",
-            "festival",
-            "indie"
-        ],
-        "status": "scheduled"
-    }
+  {
+    "eventId": "1",
+    "eventName": "Summer Music Festival",
+    "eventType": "Concert",
+    "eventDate": "2023-07-15T20:00:00Z",
+    "location": "Central Park",
+    "host": "Music Events Ltd.",
+    "description": "An outdoor summer music festival featuring top bands.",
+    "capacity": 5000,
+    "ticketPrice": 49.99,
+    "tags": ["music", "summer", "outdoor"],
+    "status": "scheduled"
+  },
+  {
+    "eventId": "2",
+    "eventName": "Tech Conference 2023",
+    "eventType": "Conference",
+    "eventDate": "2023-09-10T09:00:00Z",
+    "location": "Tech Convention Center",
+    "host": "InnovateX",
+    "description": "Annual technology conference with keynotes from industry leaders.",
+    "capacity": 3000,
+    "ticketPrice": 399.99,
+    "tags": ["technology", "innovation", "networking"],
+    "status": "scheduled"
+  },
+  {
+    "eventId": "3",
+    "eventName": "City Marathon",
+    "eventType": "Sports",
+    "eventDate": "2023-10-05T06:00:00Z",
+    "location": "City Streets",
+    "host": "City Sports Association",
+    "description": "A marathon through the city's most scenic routes.",
+    "capacity": 10000,
+    "ticketPrice": 0,
+    "tags": ["sports", "running", "health"],
+    "status": "scheduled"
+  },
+  {
+    "eventId": "4",
+    "eventName": "Local Food Fair",
+    "eventType": "Festival",
+    "eventDate": "2023-08-21T11:00:00Z",
+    "location": "Downtown Market",
+    "host": "Foodie Group",
+    "description": "Explore local cuisines and gourmet food from top chefs.",
+    "capacity": 2000,
+    "ticketPrice": 25.0,
+    "tags": ["food", "gourmet", "local"],
+    "status": "scheduled"
+  },
+  {
+    "eventId": "5",
+    "eventName": "Charity Ball Gala",
+    "eventType": "Social",
+    "eventDate": "2023-12-01T19:00:00Z",
+    "location": "Grand Hotel Ballroom",
+    "host": "Charity Foundation",
+    "description": "An elegant evening of dining and dancing in support of local charities.",
+    "capacity": 500,
+    "ticketPrice": 150.0,
+    "tags": ["charity", "gala", "elegant"],
+    "status": "scheduled"
+  },
+  {
+    "eventId": "6",
+    "eventName": "Jazz Night Downtown",
+    "eventType": "Concert",
+    "eventDate": "2023-09-25T20:00:00Z",
+    "location": "Riverfront Jazz Club",
+    "host": "Jazz Enthusiasts Club",
+    "description": "A night of classic and contemporary jazz music by renowned artists.",
+    "capacity": 300,
+    "ticketPrice": 40.0,
+    "tags": ["music", "jazz", "nightlife"],
+    "status": "scheduled"
+  },
+  {
+    "eventId": "7",
+    "eventName": "Art & Wine Weekend",
+    "eventType": "Exhibition",
+    "eventDate": "2023-11-11T10:00:00Z",
+    "location": "City Art Gallery",
+    "host": "Art Lovers Association",
+    "description": "A weekend of fine arts display and wine tasting sessions.",
+    "capacity": 800,
+    "ticketPrice": 60.0,
+    "tags": ["art", "wine", "exhibition"],
+    "status": "scheduled"
+  },
+  {
+    "eventId": "8",
+    "eventName": "Book Launch: 'Journeys Through Time'",
+    "eventType": "Cultural",
+    "eventDate": "2023-10-15T17:00:00Z",
+    "location": "The Literary Cafe",
+    "host": "Author John Smith",
+    "description": "Book launch and signing event by bestselling author John Smith.",
+    "capacity": 200,
+    "ticketPrice": 20.0,
+    "tags": ["book", "launch", "author"],
+    "status": "scheduled"
+  },
+  {
+    "eventId": "9",
+    "eventName": "Outdoor Yoga Retreat",
+    "eventType": "Health",
+    "eventDate": "2023-06-20T07:00:00Z",
+    "location": "Sunny Meadows Park",
+    "host": "Yoga Life",
+    "description": "A weekend retreat focusing on yoga, meditation, and wellness.",
+    "capacity": 150,
+    "ticketPrice": 100.0,
+    "tags": ["yoga", "health", "retreat"],
+    "status": "scheduled"
+  },
+  {
+    "eventId": "10",
+    "eventName": "Indie Film Festival",
+    "eventType": "Entertainment",
+    "eventDate": "2023-08-05T12:00:00Z",
+    "location": "Downtown Cinema",
+    "host": "Indie Film Society",
+    "description": "Showcasing the best of independent films from around the world.",
+    "capacity": 1000,
+    "ticketPrice": 30.0,
+    "tags": ["film", "festival", "indie"],
+    "status": "scheduled"
+  }
 ]
