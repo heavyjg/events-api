@@ -9,6 +9,15 @@ import {
 
 export const EVENT_KEY = process.env.EVENTS_TABLE as string;
 
+export type AttributeValue =
+  | string
+  | number
+  | boolean
+  | string[]
+  | number[]
+  | boolean[]
+  | null;
+
 export type Event = {
   eventId: string; // Unique identifier for the event
   eventName: string; // Name of the event
