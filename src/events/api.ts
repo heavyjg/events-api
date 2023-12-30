@@ -6,7 +6,12 @@ import type {
 } from "aws-lambda";
 import express from "express";
 import serverless from "serverless-http";
-import { saveEvent, getEvent } from "./eventsController";
+import {
+  saveEvent,
+  getEvent,
+  updateEvent,
+  getAllEvents,
+} from "./eventsController";
 
 const app = express();
 app.use(express.json());
@@ -14,6 +19,10 @@ app.use(express.json());
 app.get("/events/:eventId", getEvent);
 
 app.post("/events", saveEvent);
+
+app.put("/events/:eventId", updateEvent);
+
+app.get("/events", getAllEvents);
 
 export default app;
 
