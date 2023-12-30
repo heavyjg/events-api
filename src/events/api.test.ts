@@ -1,6 +1,10 @@
 // ./src/lambda1.test.ts
 import { mockClient } from "aws-sdk-client-mock";
-import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  ScanCommand,
+} from "@aws-sdk/lib-dynamodb";
 import assert from "node:assert";
 import test, { beforeEach } from "node:test";
 import app from "./api";
@@ -72,6 +76,50 @@ test("GET /events/:eventId - not found", async () => {
 
   assert.strictEqual(res.statusCode, 404);
   assert.strictEqual(res.body.error, "Event not found");
+});
+
+test("GET /events - retrieve all events successfully", async () => {
+  // Create a list of mock events
+  const mockEvents = Array.from({ length: 5 }, () => generateFakeEvent());
+
+  ddbMock.on(ScanCommand).resolves({ Items: mockEvents });
+
+  const res = await request(app).get("/events");
+
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(res.body.length, mockEvents.length);
+  mockEvents.forEach((event, index) => {
+    assert.strictEqual(res.body[index].eventId, event.eventId);
+    assert.strictEqual(res.body[index].eventName, event.eventName);
+    assert.strictEqual(res.body[index].eventType, event.eventType);
+    assert.strictEqual(res.body[index].eventDate, event.eventDate);
+    assert.strictEqual(res.body[index].location, event.location);
+    assert.strictEqual(res.body[index].host, event.host);
+    if (event.description) {
+      assert.strictEqual(res.body[index].description, event.description);
+    }
+    if (event.capacity) {
+      assert.strictEqual(res.body[index].capacity, event.capacity);
+    }
+    if (event.ticketPrice) {
+      assert.strictEqual(res.body[index].ticketPrice, event.ticketPrice);
+    }
+    if (event.tags) {
+      assert.deepStrictEqual(res.body[index].tags, event.tags);
+    }
+    if (event.status) {
+      assert.strictEqual(res.body[index].status, event.status);
+    }
+  });
+});
+
+test("GET /events - handle empty list", async () => {
+  ddbMock.on(ScanCommand).resolves({ Items: [] });
+
+  const response = await request(app).get("/events");
+
+  assert.strictEqual(response.statusCode, 200);
+  assert.strictEqual(response.body.length, 0);
 });
 
 test("POST /events - success", async () => {
