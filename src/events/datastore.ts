@@ -3,6 +3,7 @@ import {
   PutCommand,
   UpdateCommand,
   UpdateCommandInput,
+  ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
 import type {
   AttributeValue,
@@ -14,7 +15,7 @@ import type {
 } from "../types";
 import { EVENT_KEY } from "../types";
 import { getDdbDocumentClient } from "../aws/aws";
-import { ReturnValue, ScanCommand } from "@aws-sdk/client-dynamodb";
+import { ReturnValue } from "@aws-sdk/client-dynamodb";
 
 const EventsDB = () => {
   const ddbDocumentClient = getDdbDocumentClient();
@@ -26,14 +27,14 @@ const EventsDB = () => {
     };
 
     (await ddbDocumentClient.send(
-      new PutCommand(params),
+      new PutCommand(params)
     )) as IPutCommandOutput<Event>;
 
     return event;
   };
 
   const getEventFromAWS = async (
-    eventId: string,
+    eventId: string
   ): Promise<Event | undefined> => {
     const params = {
       TableName: EVENT_KEY,
@@ -43,7 +44,7 @@ const EventsDB = () => {
     };
 
     const { Item: event } = (await ddbDocumentClient.send(
-      new GetCommand(params),
+      new GetCommand(params)
     )) as IGetCommandOutput<Event>;
 
     return event;
@@ -51,7 +52,7 @@ const EventsDB = () => {
 
   const updateEventInAWS = async (
     eventId: string,
-    updatedFields: Partial<Event>,
+    updatedFields: Partial<Event>
   ): Promise<Event | undefined> => {
     // Build the update expression and attribute values based on what's provided
     let updateExpression = "set";
@@ -99,7 +100,7 @@ const EventsDB = () => {
     };
 
     const { Attributes: result } = (await ddbDocumentClient.send(
-      new UpdateCommand(params),
+      new UpdateCommand(params)
     )) as IUpdateCommandOutput<Event>;
 
     return result;
@@ -115,7 +116,7 @@ const EventsDB = () => {
 
   const update = async (
     eventId: string,
-    event: Event,
+    event: Event
   ): Promise<Event | undefined> => {
     return await updateEventInAWS(eventId, event);
   };
@@ -125,10 +126,16 @@ const EventsDB = () => {
       TableName: EVENT_KEY,
     };
 
-    const { Items: events } = (await ddbDocumentClient.send(
-      new ScanCommand(params),
-    )) as IScanCommandOutput<Event[]>;
-    return events;
+    try {
+      const response = await ddbDocumentClient.send(new ScanCommand(params));
+
+      // Convert DynamoDB items to normal JavaScript objects
+      const events = response?.Items?.map((item) => item as Event) ?? [];
+      return events as Event[];
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error retrieving events");
+    }
   };
 
   return {
