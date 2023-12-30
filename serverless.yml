@@ -13,6 +13,13 @@ custom:
       heapMax: 1g
       migrate: true
       docker: false
+      seed: true
+
+    seed:
+      domain:
+        sources:
+          - table: ${self:custom.tableName}
+            sources: [./resources/seeds/events.json]
 
 plugins:
   - serverless-offline # used for local execution
