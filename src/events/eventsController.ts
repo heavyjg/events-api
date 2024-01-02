@@ -2,27 +2,8 @@ import { Request, Response } from "express";
 import EventsDB from "./datastore";
 import type { Event } from "../types";
 import { v4 as uuidv4 } from "uuid";
+import { validateFieldTypes, validateKeys, validKeys } from "./validations";
 const { save, get, update, getAll } = EventsDB();
-
-// Define the valid keys based on the Event type
-const validKeys = [
-  "eventId",
-  "eventName",
-  "eventType",
-  "eventDate",
-  "location",
-  "host",
-  "description",
-  "capacity",
-  "ticketPrice",
-  "tags",
-  "status",
-];
-
-// Function to check if a key is a valid key of Event
-function isValidKey(key: string): key is keyof Event {
-  return validKeys.includes(key);
-}
 
 export async function getEvent(request: Request, response: Response) {
   const eventId = request.params.eventId;
@@ -75,6 +56,19 @@ export async function saveEvent(request: Request, response: Response) {
     return;
   }
 
+  const errorMessage = validateKeys(reqBody, validKeys);
+  if (errorMessage) {
+    response.status(400).send(errorMessage);
+    return;
+  }
+
+  // Type validation
+  const typeErrorMessage = validateFieldTypes(reqBody);
+  if (typeErrorMessage) {
+    response.status(400).send(typeErrorMessage);
+    return;
+  }
+
   // Constructing an event object with validation
   const event: Event = {
     eventId: uuidv4(), // Generate a new UUID for the event
@@ -119,14 +113,10 @@ export async function updateEvent(request: Request, response: Response) {
     return;
   }
 
-  // Check if all keys in the request body are part of the Event type
-  for (const key of Object.keys(reqBody)) {
-    if (!isValidKey(key)) {
-      response
-        .status(400)
-        .send(`Error: Invalid field '${key}' in request body`);
-      return;
-    }
+  const errorMessage = validateKeys(reqBody, validKeys);
+  if (errorMessage) {
+    response.status(400).send(errorMessage);
+    return;
   }
 
   // Constructing an event object with validation
