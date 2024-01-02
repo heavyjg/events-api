@@ -1,6 +1,7 @@
 // ./src/lambda1.test.ts
 import { mockClient } from "aws-sdk-client-mock";
 import {
+  DeleteCommand,
   DynamoDBDocumentClient,
   GetCommand,
   ScanCommand,
@@ -343,4 +344,52 @@ describe("PUT /events", () => {
       "Response status code should be 204 for successful partial update",
     );
   });
+});
+
+describe("DELETE /events", { only: true }, () => {
+  it("DELETE /events/:eventId - success", { only: true }, async () => {
+    const mockEvent = generateFakeEvent();
+    const postResponse = await request(app).post("/events").send(mockEvent);
+    assert.strictEqual(postResponse.statusCode, 201);
+
+    // Assign the eventId from the POST response to the mock event
+    mockEvent.eventId = postResponse.body.eventId;
+
+    const response = await request(app).delete(`/events/${mockEvent.eventId}`);
+    assert.strictEqual(
+      response.statusCode,
+      204,
+      "Response status code should be 204 for successful delete",
+    );
+  });
+
+  it(
+    "DELETE /events/:eventId - fail due to missing eventId",
+    { only: true },
+    async () => {
+      const response = await request(app).delete(`/events/`);
+      assert.strictEqual(
+        response.statusCode,
+        404,
+        "Response status code should be 404 for missing eventId",
+      );
+    },
+  );
+
+  it(
+    "DELETE /events/:eventId - fail due to invalid eventId",
+    { only: true },
+    async () => {
+      ddbMock
+        .on(DeleteCommand)
+        .rejects({ name: "ConditionalCheckFailedException" });
+
+      const response = await request(app).delete(`/events/invalid-event-id`);
+      assert.strictEqual(
+        response.statusCode,
+        404,
+        "Response status code should be 404 for invalid eventId",
+      );
+    },
+  );
 });
