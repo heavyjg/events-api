@@ -4,6 +4,26 @@ import type { Event } from "../types";
 import { v4 as uuidv4 } from "uuid";
 const { save, get, update, getAll } = EventsDB();
 
+// Define the valid keys based on the Event type
+const validKeys = [
+  "eventId",
+  "eventName",
+  "eventType",
+  "eventDate",
+  "location",
+  "host",
+  "description",
+  "capacity",
+  "ticketPrice",
+  "tags",
+  "status",
+];
+
+// Function to check if a key is a valid key of Event
+function isValidKey(key: string): key is keyof Event {
+  return validKeys.includes(key);
+}
+
 export async function getEvent(request: Request, response: Response) {
   const eventId = request.params.eventId;
   if (eventId == null) {
@@ -90,9 +110,23 @@ export async function updateEvent(request: Request, response: Response) {
   const reqBody = request.body;
 
   // Basic validation for request body existence
-  if (!reqBody || typeof reqBody !== "object") {
+  if (
+    !reqBody ||
+    typeof reqBody !== "object" ||
+    Object.keys(reqBody).length === 0
+  ) {
     response.status(400).send("Error: Invalid request body");
     return;
+  }
+
+  // Check if all keys in the request body are part of the Event type
+  for (const key of Object.keys(reqBody)) {
+    if (!isValidKey(key)) {
+      response
+        .status(400)
+        .send(`Error: Invalid field '${key}' in request body`);
+      return;
+    }
   }
 
   // Constructing an event object with validation
@@ -114,8 +148,12 @@ export async function updateEvent(request: Request, response: Response) {
     await update(eventId, event);
     response.status(204).send();
   } catch (error) {
-    console.error(error);
-    response.status(500).send("Internal Server Error");
+    if ((error as Error).message === "Event not found") {
+      response.status(404).send("Event not found");
+    } else
+      response
+        .status(500)
+        .send("Internal Server Error, " + (error as Error)?.message);
   }
 }
 
