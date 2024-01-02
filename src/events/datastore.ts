@@ -27,14 +27,14 @@ const EventsDB = () => {
     };
 
     (await ddbDocumentClient.send(
-      new PutCommand(params),
+      new PutCommand(params)
     )) as IPutCommandOutput<Event>;
 
     return event;
   };
 
   const getEventFromAWS = async (
-    eventId: string,
+    eventId: string
   ): Promise<Event | undefined> => {
     const params = {
       TableName: EVENT_KEY,
@@ -44,7 +44,7 @@ const EventsDB = () => {
     };
 
     const { Item: event } = (await ddbDocumentClient.send(
-      new GetCommand(params),
+      new GetCommand(params)
     )) as IGetCommandOutput<Event>;
 
     return event;
@@ -52,7 +52,7 @@ const EventsDB = () => {
 
   const updateEventInAWS = async (
     eventId: string,
-    updatedFields: Partial<Event>,
+    updatedFields: Partial<Event>
   ) => {
     // Build the update expression and attribute values based on what's provided
     let updateExpression = "set";
@@ -96,11 +96,22 @@ const EventsDB = () => {
         "#capacity": "capacity",
         "#status": "status",
       },
-      ReturnValues: "UPDATED_NEW" as ReturnValue,
+      ConditionExpression: "attribute_exists(eventId)",
+      ReturnValues: "NONE" as ReturnValue,
     };
 
-    await ddbDocumentClient.send(new UpdateCommand(params));
-    return;
+    try {
+      (await ddbDocumentClient.send(
+        new UpdateCommand(params)
+      )) as IUpdateCommandOutput<Event>;
+    } catch (error) {
+      if ((error as Error).name === "ConditionalCheckFailedException") {
+        throw new Error("Event not found");
+      } else {
+        console.error(error);
+        throw new Error("Internal Server Error");
+      }
+    }
   };
 
   const save = async (event: Event): Promise<Event | undefined> => {
