@@ -24,7 +24,6 @@ app.post("/events", saveEvent);
 
 app.put("/events/:eventId", updateEvent);
 
-
 export default app;
 
 const lambdaHandler = serverless(app);
