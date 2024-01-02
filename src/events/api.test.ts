@@ -41,14 +41,14 @@ describe("GET /events", () => {
     ddbMock.on(GetCommand).resolves({ Item: mockEvent });
 
     const res = await request(app).get(
-      "/events/28899ee7-b841-4da6-81e2-b9054c091a79"
+      "/events/28899ee7-b841-4da6-81e2-b9054c091a79",
     );
 
     // Assertions
     assert.strictEqual(
       res.statusCode,
       200,
-      "Response status code should be 200"
+      "Response status code should be 200",
     );
     assert.deepStrictEqual(
       res.body,
@@ -65,7 +65,7 @@ describe("GET /events", () => {
         ...(mockEvent.tags && { tags: mockEvent.tags }),
         ...(mockEvent.status && { status: mockEvent.status }),
       },
-      "Response body should match the mock event structure and data"
+      "Response body should match the mock event structure and data",
     );
   });
 
@@ -110,7 +110,7 @@ describe("GET ALL /events", () => {
           ...(event.tags && { tags: event.tags }),
           ...(event.status && { status: event.status }),
         },
-        "Response body should match the mock event structure and data"
+        "Response body should match the mock event structure and data",
       );
 
       assert.strictEqual(res.body[index].eventId, event.eventId);
@@ -172,7 +172,7 @@ describe("POST /events", () => {
         ...(mockEvent.tags && { tags: mockEvent.tags }),
         ...(mockEvent.status && { status: mockEvent.status }),
       },
-      "Response body should match the mock event structure and data"
+      "Response body should match the mock event structure and data",
     );
   });
 
@@ -185,7 +185,7 @@ describe("POST /events", () => {
     assert.strictEqual(response.statusCode, 400);
     assert.strictEqual(
       response.text,
-      "Error: Missing required fields: eventName"
+      "Error: Missing required fields: eventName",
     );
   });
 
@@ -199,7 +199,7 @@ describe("POST /events", () => {
     assert.match(
       response.text,
       /Error: .*eventName.*/,
-      "Response text should contain an error message for null eventName"
+      "Response text should contain an error message for null eventName",
     );
   });
 
@@ -226,7 +226,7 @@ describe("POST /events", () => {
     assert.match(
       response.text,
       /Error: .*unexpectedField.*/,
-      "Response text should contain an error message for unexpected field"
+      "Response text should contain an error message for unexpected field",
     );
   });
 
@@ -242,7 +242,7 @@ describe("POST /events", () => {
     assert.strictEqual(
       response.text,
       "capacity must be a number",
-      "Response text should contain an error message for incorrect data type"
+      "Response text should contain an error message for incorrect data type",
     );
   });
 });
@@ -268,7 +268,7 @@ describe("PUT /events", () => {
     assert.strictEqual(
       response.statusCode,
       204,
-      "Response status code should be 200"
+      "Response status code should be 200",
     );
   });
 
@@ -282,7 +282,7 @@ describe("PUT /events", () => {
     assert.strictEqual(
       response.statusCode,
       404,
-      "Response status code should be 404 for missing eventId"
+      "Response status code should be 404 for missing eventId",
     );
   });
 
@@ -300,7 +300,7 @@ describe("PUT /events", () => {
     assert.strictEqual(
       response.statusCode,
       404,
-      "Response status code should be 400 for invalid eventId"
+      "Response status code should be 400 for invalid eventId",
     );
   });
 
@@ -319,7 +319,7 @@ describe("PUT /events", () => {
     assert.strictEqual(
       response.statusCode,
       400,
-      "Response status code should be 400 for invalid request body"
+      "Response status code should be 400 for invalid request body",
     );
   });
 
@@ -340,7 +340,7 @@ describe("PUT /events", () => {
     assert.strictEqual(
       response.statusCode,
       204,
-      "Response status code should be 204 for successful partial update"
+      "Response status code should be 204 for successful partial update",
     );
   });
 });
