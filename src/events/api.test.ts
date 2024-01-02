@@ -180,6 +180,71 @@ test("POST /events - fail", async () => {
   );
 });
 
+// Test to ensure that POST request fails when a mandatory field is empty
+test("POST /events - fail due to empty mandatory field", async () => {
+  const mockEvent = generateFakeEvent();
+  mockEvent.eventName = ""; // Set a mandatory field to empty
+
+  const response = await request(app).post("/events").send(mockEvent);
+
+  assert.strictEqual(response.statusCode, 400);
+  assert.match(
+    response.text,
+    /Error: .*eventName.*/,
+    "Response text should contain an error message for null eventName",
+  );
+});
+
+// Test to ensure that POST request succeeds even when optional fields are missing
+test("POST /events - success without optional fields", async () => {
+  const mockEvent = generateFakeEvent();
+  delete mockEvent.description; // Remove an optional field
+  delete mockEvent.capacity; // Remove another optional field
+
+  const response = await request(app).post("/events").send(mockEvent);
+
+  assert.strictEqual(response.statusCode, 201);
+  assert.ok(response.body.eventId);
+});
+
+// Test to ensure that POST request fails when unexpected fields are present
+test("POST /events - fail due to unexpected fields", async () => {
+  const mockEvent = generateFakeEvent();
+
+  //@ts-expect-error testing api behavior on unexpected field
+  mockEvent.unexpectedField = "unexpected"; // Add an unexpected field
+
+  const response = await request(app).post("/events").send(mockEvent);
+
+  assert.strictEqual(response.statusCode, 400);
+  assert.match(
+    response.text,
+    /Error: .*unexpectedField.*/,
+    "Response text should contain an error message for unexpected field",
+  );
+});
+
+// Test to ensure that POST request fails when data types are incorrect
+test(
+  "POST /events - fail due to incorrect data types",
+  { only: true },
+  async () => {
+    const mockEvent = generateFakeEvent();
+
+    //@ts-expect-error forcing a string on a number field to test api behavior
+    mockEvent.capacity = "not a number"; // Invalid data type for capacity
+
+    const response = await request(app).post("/events").send(mockEvent);
+
+    assert.strictEqual(response.statusCode, 400);
+    assert.strictEqual(
+      response.text,
+      "capacity must be a number",
+      "Response text should contain an error message for incorrect data type",
+    );
+  },
+);
+
 test("PUT /events/:eventId - success", async () => {
   const mockEvent = generateFakeEvent();
   const postResponse = await request(app).post("/events").send(mockEvent);
