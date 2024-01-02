@@ -9,5 +9,10 @@
     "target": "ES2022",
     "strict": true
   },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
   "include": ["src/**/*.ts"]
 }
