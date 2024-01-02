@@ -11,6 +11,7 @@ import {
   getEvent,
   updateEvent,
   getAllEvents,
+  deleteEvent,
 } from "./eventsController";
 
 const app = express();
@@ -23,6 +24,8 @@ app.get("/events", getAllEvents);
 app.post("/events", saveEvent);
 
 app.put("/events/:eventId", updateEvent);
+
+app.delete("/events/:eventId", deleteEvent);
 
 export default app;
 

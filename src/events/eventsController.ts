@@ -3,7 +3,7 @@ import EventsDB from "./datastore";
 import type { Event } from "../types";
 import { v4 as uuidv4 } from "uuid";
 import { validateFieldTypes, validateKeys, validKeys } from "./validations";
-const { save, get, update, getAll } = EventsDB();
+const { get, getAll, save, update, del } = EventsDB();
 
 export async function getEvent(request: Request, response: Response) {
   const eventId = request.params.eventId;
@@ -163,5 +163,30 @@ export async function getAllEvents(request: Request, response: Response) {
   } catch (error) {
     console.error(error);
     response.status(500).send("Internal Server Error");
+  }
+}
+
+export async function deleteEvent(request: Request, response: Response) {
+  const eventId = request.params.eventId;
+
+  if (!eventId) {
+    response.status(400).send("Error: missing eventId");
+    return;
+  }
+
+  try {
+    await del(eventId);
+    response
+      .status(204)
+      .send(`Event with eventId ${eventId} successfully deleted`);
+  } catch (error) {
+    const errorMessage = (error as Error).message;
+
+    if (errorMessage === "Event not found or already deleted") {
+      response.status(404).send("Error: Event not found");
+    } else {
+      console.error(error);
+      response.status(500).send("Internal Server Error, " + errorMessage);
+    }
   }
 }
