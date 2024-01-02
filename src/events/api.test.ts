@@ -4,6 +4,7 @@ import {
   DynamoDBDocumentClient,
   GetCommand,
   ScanCommand,
+  UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import assert from "node:assert";
 import test, { beforeEach } from "node:test";
@@ -179,7 +180,7 @@ test("POST /events - fail", async () => {
   );
 });
 
-test("PUT /events/:eventId - success", { only: true }, async () => {
+test("PUT /events/:eventId - success", async () => {
   const mockEvent = generateFakeEvent();
   const postResponse = await request(app).post("/events").send(mockEvent);
   assert.strictEqual(postResponse.statusCode, 201);
@@ -188,17 +189,12 @@ test("PUT /events/:eventId - success", { only: true }, async () => {
   mockEvent.eventId = postResponse.body.eventId;
 
   // Now, update the mock event with new data
-  const updatedEvent = {
-    ...mockEvent,
-    eventName: "Updated Event Name",
-  };
+  const updatedEvent = generateFakeEvent();
 
-  console.log("antes do put");
   // Send a PUT request to update the event
   const response = await request(app)
     .put(`/events/${mockEvent.eventId}`)
     .send(updatedEvent);
-  console.log("depois do put");
 
   // Assertions for PUT request
   assert.strictEqual(
@@ -206,5 +202,76 @@ test("PUT /events/:eventId - success", { only: true }, async () => {
     204,
     "Response status code should be 200",
   );
-  console.log("depois do assertion");
+});
+
+test("PUT /events/:eventId - fail due to missing eventId", async () => {
+  const updatedEvent = generateFakeEvent();
+
+  const response = await request(app)
+    .put(`/events/`) // Missing eventId in URL
+    .send(updatedEvent);
+
+  assert.strictEqual(
+    response.statusCode,
+    404,
+    "Response status code should be 404 for missing eventId",
+  );
+});
+
+test("PUT /events/:eventId - fail due to invalid eventId", async () => {
+  const updatedEvent = generateFakeEvent();
+
+  ddbMock
+    .on(UpdateCommand)
+    .rejects({ name: "ConditionalCheckFailedException" });
+
+  const response = await request(app)
+    .put(`/events/invalid-event-id`) // Invalid eventId
+    .send(updatedEvent);
+
+  assert.strictEqual(
+    response.statusCode,
+    404,
+    "Response status code should be 400 for invalid eventId",
+  );
+});
+
+test("PUT /events/:eventId - fail due to invalid request body", async () => {
+  const mockEventId = "some-valid-event-id";
+
+  const testmock = {
+    lixo: "vai dar ruim",
+    mpo: "sabugo barril",
+  };
+
+  const response = await request(app)
+    .put(`/events/${mockEventId}`)
+    .send(testmock); // Invalid body
+
+  assert.strictEqual(
+    response.statusCode,
+    400,
+    "Response status code should be 400 for invalid request body",
+  );
+});
+
+test("PUT /events/:eventId - success with partial update", async () => {
+  const mockEvent = generateFakeEvent();
+  const postResponse = await request(app).post("/events").send(mockEvent);
+
+  mockEvent.eventId = postResponse.body.eventId;
+
+  const partialUpdate = {
+    eventName: "Partially Updated Event Name",
+  };
+
+  const response = await request(app)
+    .put(`/events/${mockEvent.eventId}`)
+    .send(partialUpdate);
+
+  assert.strictEqual(
+    response.statusCode,
+    204,
+    "Response status code should be 204 for successful partial update",
+  );
 });
