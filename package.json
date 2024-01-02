@@ -43,5 +43,22 @@
     "supertest": "^6.3.3",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6"
-  }
+  },
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heavyjg/events-api.git"
+  },
+  "keywords": [
+    "events-api",
+    "serverless",
+    "lambda",
+    "dynamodb"
+  ],
+  "author": "João Gonçalves",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/heavyjg/events-api/issues"
+  },
+  "homepage": "https://github.com/heavyjg/events-api#readme"
 }
