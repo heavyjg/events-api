@@ -5,6 +5,7 @@
   "description": "A serverless API to store and manipulate events",
   "scripts": {
     "test": "glob -c \"node --import tsx --test\" \"./src/**/*.test.ts\"",
+    "test-only": "glob -c \"node --import tsx --test-only\" \"./src/**/*.test.ts\"",
     "build": "tsc --noemit",
     "lint": "eslint --ext .ts --fix .",
     "prettier": "prettier --write --ignore-unknown .",
