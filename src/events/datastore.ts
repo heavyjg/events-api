@@ -10,7 +10,6 @@ import type {
   Event,
   IGetCommandOutput,
   IPutCommandOutput,
-  IScanCommandOutput,
   IUpdateCommandOutput,
 } from "../types";
 import { EVENT_KEY } from "../types";
