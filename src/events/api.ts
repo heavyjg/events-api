@@ -18,11 +18,12 @@ app.use(express.json());
 
 app.get("/events/:eventId", getEvent);
 
+app.get("/events", getAllEvents);
+
 app.post("/events", saveEvent);
 
 app.put("/events/:eventId", updateEvent);
 
-app.get("/events", getAllEvents);
 
 export default app;
 
