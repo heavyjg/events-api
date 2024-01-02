@@ -1,24 +1,78 @@
-# Events API - Serverless Guru Challenge
+<div align="center">
+<h1>
+<a name="logo" href="https://www.aregtech.com"><img align="center" src="resources/Events_API.png" alt="AREG SDK Home" style="width:50%;height:30%"/></a>
+<br /><br /><strong>Events API</strong>
 
-This project is the artifact of a code challenge.
-The goal is to build a API to store and manipulates events, using: Serverless Framework, Node, Lambda, DynamoDB, and Github Actions.
+</h1>
 
-[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com) [![npm version](https://badge.fury.io/js/serverless.svg)](https://badge.fury.io/js/serverless) [![Build status](https://github.com/heavyjg/events-api/actions/workflows/main.yml/badge.svg)](https://github.com/heavyjg/sguru-challenge-events-api/actions?query=main) ![Known Vulnerabilities](https://snyk.io/test/github/heavyjg/events-api/badge.svg)
+[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com) [![npm version](https://badge.fury.io/js/serverless.svg)](https://badge.fury.io/js/serverless) [![Build status](https://github.com/heavyjg/events-api/actions/workflows/build.yml/badge.svg)](https://github.com/heavyjg/events-api/actions?query=main) ![Known Vulnerabilities](https://snyk.io/test/github/heavyjg/events-api/badge.svg)
 
-## Usage
+---
 
-### Deployment
+</div>
 
-Install dependencies with:
+## Introduction[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#introduction)
+
+**events-api** is a practical and effective tool for managing events, built using modern technologies including Node.js 20, TypeScript, Serverless Framework, and DynamoDB. This combination of technologies ensures a scalable, efficient, and easy-to-maintain API.
+
+Key Features:
+
+- **Built with Node.js 20 and TypeScript**: Offers a stable and scalable backend with the added benefits of TypeScript's strong typing.
+- **Serverless Framework Integration**: Ensures easy deployment and lower maintenance overhead, making the API cost-effective and scalable.
+- **DynamoDB for Data Storage**: Leverages AWS DynamoDB for reliable and fast data storage, ideal for handling event data.
+- **Event CRUD Operations**: Supports creating, reading, updating, and deleting events with ease.
+- **Simple Event Tracking**: Manage essential details like event names, types, dates, and locations.
+- **Data Validation**: Includes basic validation to ensure the accuracy and integrity of event data.
+- **Ease of Use**: Designed to be straightforward and user-friendly, making it accessible for developers of varying skill levels.
+
+This API is a perfect solution for developers looking for a simple yet efficient way to handle event management in their applications, with the backing of robust and modern technologies.
+
+---
+
+## Installation[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#installation)
+
+#### Requirements
+
+- [AWS Credentials](https://www.serverless.com/framework/docs/providers/aws/guide/credentials/) ready to go
+- Node.js 20.x
+- [Java Runtime Engine (JRE) version 6.x or newer OR docker CLI client](https://www.serverless.com/plugins/serverless-dynamodb-local)
+
+#### Steps
+
+1. Install dependencies with:
 
 ```
-npm install
+npm i
+npm i -g serverless
+serverless dynamodb install
 ```
 
-and then deploy with:
+2. Then initialize husky hooks with:
 
 ```
-serverless deploy
+npm prepare
+```
+
+3. Run to connect with Serverless dashboard account:
+
+```
+serverless
+```
+
+---
+
+## Deploy[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#deploy)
+
+Now you can deploy locally with:
+
+```
+serverless offline start
+```
+
+or to any stage with:
+
+```
+serverless deploy -stage your-stage
 ```
 
 After running deploy, you should see output similar to:
@@ -32,3 +86,11 @@ endpoint: ANY - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com
 functions:
   api: aws-node-express-dynamodb-api-project-dev-api (766 kB)
 ```
+
+---
+
+#### Thank you!!
+
+**Our amazing contributors**:
+
+[<img src="https://github.com/heavyjg.png" width="60px;"/><br /><sub><a href="https://github.com/heavyjg">João G.</a></sub>](https://github.com/heavyjg/events-api)
