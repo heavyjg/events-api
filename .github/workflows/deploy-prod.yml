@@ -1,12 +1,6 @@
 name: Deploy prod
 
-on:
-  push:
-    branches:
-      - prod
-  pull_request:
-    branches:
-      - prod
+on: workflow_dispatch
 
 jobs:
   deploy:
