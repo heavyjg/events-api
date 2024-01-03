@@ -4,8 +4,8 @@ import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyStructuredResultV2,
 } from "aws-lambda";
-import * as express from "express";
-import * as serverless from "serverless-http";
+import express from "express";
+import serverless from "serverless-http";
 import {
   saveEvent,
   getEvent,
@@ -33,7 +33,7 @@ const lambdaHandler = serverless(app);
 
 export const handler: Handler = async (
   event: APIGatewayProxyEventV2,
-  context: Context
+  context: Context,
 ): Promise<APIGatewayProxyStructuredResultV2> => {
   return lambdaHandler(event, context);
 };
