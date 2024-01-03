@@ -5,6 +5,21 @@ import { v4 as uuidv4 } from "uuid";
 import { validateFieldTypes, validateKeys, validKeys } from "./validations";
 const { get, getAll, save, update, delete_ } = EventsDB();
 
+function handleGetEventResponse(
+  response: Response,
+  result: Event | Event[] | undefined
+) {
+  if (!result) {
+    response.status(404).json({ error: "Event not found" });
+  } else if ("error" in result) {
+    response.status(500).json({
+      error: "An error occurred while retrieving the event",
+    });
+  } else {
+    response.status(200).json(result);
+  }
+}
+
 export async function getEvent(request: Request, response: Response) {
   const eventId = request.params.eventId;
   if (eventId == null) {
@@ -15,15 +30,7 @@ export async function getEvent(request: Request, response: Response) {
   try {
     const result: Event | undefined = await get(eventId);
 
-    if (!result) {
-      response.status(404).json({ error: "Event not found" });
-    } else if ("error" in result) {
-      response.status(500).json({
-        error: "An error occurred while retrieving the event",
-      });
-    } else {
-      response.status(200).json(result);
-    }
+    handleGetEventResponse(response, result);
   } catch (error) {
     console.error(error);
     response.status(500).send("Internal Server Error");
@@ -151,15 +158,7 @@ export async function getAllEvents(request: Request, response: Response) {
   try {
     const result: Event[] | undefined = await getAll();
 
-    if (!result) {
-      response.status(404).json({ error: "Event not found" });
-    } else if ("error" in result) {
-      response.status(500).json({
-        error: "An error occurred while retrieving the event",
-      });
-    } else {
-      response.status(200).json(result);
-    }
+    handleGetEventResponse(response, result);
   } catch (error) {
     console.error(error);
     response.status(500).send("Internal Server Error");
