@@ -3,7 +3,7 @@ import EventsDB from "./datastore";
 import type { Event } from "../types";
 import { v4 as uuidv4 } from "uuid";
 import { validateFieldTypes, validateKeys, validKeys } from "./validations";
-const { get, getAll, save, update, del } = EventsDB();
+const { get, getAll, save, update, delete_ } = EventsDB();
 
 export async function getEvent(request: Request, response: Response) {
   const eventId = request.params.eventId;
@@ -175,7 +175,7 @@ export async function deleteEvent(request: Request, response: Response) {
   }
 
   try {
-    await del(eventId);
+    await delete_(eventId);
     response
       .status(204)
       .send(`Event with eventId ${eventId} successfully deleted`);
