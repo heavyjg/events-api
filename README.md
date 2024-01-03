@@ -5,7 +5,7 @@
 
 </h1>
 
-[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com) [![npm version](https://badge.fury.io/js/serverless.svg)](https://badge.fury.io/js/serverless) [![Build status](https://github.com/heavyjg/events-api/actions/workflows/build.yml/badge.svg)](https://github.com/heavyjg/events-api/actions?query=main) ![Known Vulnerabilities](https://snyk.io/test/github/heavyjg/events-api/badge.svg)
+[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com) [![npm version](https://badge.fury.io/js/serverless.svg)](https://badge.fury.io/js/serverless) [![Build status](https://github.com/heavyjg/events-api/actions/workflows/deploy.yml/badge.svg)](https://github.com/heavyjg/events-api/actions?query=main) ![Known Vulnerabilities](https://snyk.io/test/github/heavyjg/events-api/badge.svg)
 
 ---
 
