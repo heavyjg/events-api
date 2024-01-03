@@ -2,7 +2,7 @@ name: Merge master branch to staging
 on:
   push:
     branches:
-      - "master"
+      - master
 jobs:
   merge-branch:
     runs-on: ubuntu-latest
