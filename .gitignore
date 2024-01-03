@@ -3,3 +3,5 @@ node_modules
 .dynamodb
 .esbuild
 .requests
+coverage
+.nyc_output

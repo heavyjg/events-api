@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "description": "A serverless API to store and manipulate events",
   "scripts": {
-    "test": "nyc mocha --require ts-node/register src/**/*.test.ts",
+    "test": "mocha --require ts-node/register src/**/*.test.ts",
+    "coverage": "nyc --reporter=lcov npm test",
     "build": "tsc --noemit",
     "lint": "eslint --ext .ts --fix .",
     "prettier": "prettier --write --ignore-unknown .",
@@ -35,6 +36,7 @@
     "@typescript-eslint/parser": "^6.16.0",
     "aws-sdk-client-mock": "^3.0.0",
     "chai": "^5.0.0",
+    "cypress": "^13.6.2",
     "esbuild": "^0.17.19",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
