@@ -22,7 +22,7 @@ const EventsDB = () => {
   const ddbDocumentClient = getDdbDocumentClient();
 
   const getEventFromAWS = async (
-    eventId: string
+    eventId: string,
   ): Promise<Event | undefined> => {
     const params = {
       TableName: EVENT_KEY,
@@ -32,7 +32,7 @@ const EventsDB = () => {
     };
 
     const { Item: event } = (await ddbDocumentClient.send(
-      new GetCommand(params)
+      new GetCommand(params),
     )) as IGetCommandOutput<Event>;
 
     return event;
@@ -62,7 +62,7 @@ const EventsDB = () => {
     };
 
     (await ddbDocumentClient.send(
-      new PutCommand(params)
+      new PutCommand(params),
     )) as IPutCommandOutput<Event>;
 
     return event;
@@ -70,7 +70,7 @@ const EventsDB = () => {
 
   const updateEventInAWS = async (
     eventId: string,
-    updatedFields: Partial<Event>
+    updatedFields: Partial<Event>,
   ) => {
     // Build the update expression and attribute values based on what's provided
     let updateExpression = "set";
@@ -120,7 +120,7 @@ const EventsDB = () => {
 
     try {
       (await ddbDocumentClient.send(
-        new UpdateCommand(params)
+        new UpdateCommand(params),
       )) as IUpdateCommandOutput<Event>;
     } catch (error) {
       if ((error as Error).name === "ConditionalCheckFailedException") {
