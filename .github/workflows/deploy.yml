@@ -1,4 +1,4 @@
-name: Deploy dev
+name: Deploy dev-staging
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
       - name: serverless deploy
         uses: serverless/github-action@v3.2
         with:
-          args: deploy -s $STAGE
+          args: deploy -s dev
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
 
@@ -53,6 +53,6 @@ jobs:
       - name: serverless deploy
         uses: serverless/github-action@v3.2
         with:
-          args: deploy -s $STAGE
+          args: deploy -s staging
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
