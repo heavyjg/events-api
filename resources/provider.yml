@@ -1,0 +1,17 @@
+name: aws
+runtime: nodejs20.x
+iam:
+  role:
+    statements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+          - dynamodb:DeleteItem
+        Resource:
+          - Fn::GetAtt: [EventsTable, Arn]
+environment:
+  EVENTS_TABLE: ${self:custom.tableName}

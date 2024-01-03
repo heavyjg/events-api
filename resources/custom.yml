@@ -1,0 +1,21 @@
+tableName: "events-table-${sls:stage}"
+serverless-dynamodb:
+  start:
+    port: 8000
+    inMemory: true
+    heapInitial: 200m
+    heapMax: 1g
+    migrate: true
+    docker: false
+    seed: true
+  seed:
+    domain:
+      sources:
+        - table: ${self:custom.tableName}
+          sources: [./resources/seeds/events.json]
+
+  webpack:
+    webpackConfig: "webpack.config.js" # Name of webpack configuration file
+    includeModules: false # Node modules configuration for packaging
+    packager: "npm" # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.ts # Provide a glob for files to ignore

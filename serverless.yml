@@ -3,28 +3,7 @@ app: events-api
 service: events-api
 frameworkVersion: "3"
 
-custom:
-  tableName: "events-table-${sls:stage}"
-  serverless-dynamodb:
-    start:
-      port: 8000
-      inMemory: true
-      heapInitial: 200m
-      heapMax: 1g
-      migrate: true
-      docker: false
-      seed: true
-    seed:
-      domain:
-        sources:
-          - table: ${self:custom.tableName}
-            sources: [./resources/seeds/events.json]
-
-    webpack:
-      webpackConfig: "webpack.config.js" # Name of webpack configuration file
-      includeModules: false # Node modules configuration for packaging
-      packager: "npm" # Packager that will be used to package your external modules
-      excludeFiles: src/**/*.test.ts # Provide a glob for files to ignore
+custom: ${file(./resources/custom.yml)}
 
 plugins:
   - serverless-webpack
@@ -35,68 +14,8 @@ plugins:
 package:
   individually: true
 
-provider:
-  name: aws
-  runtime: nodejs20.x
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - dynamodb:Query
-            - dynamodb:Scan
-            - dynamodb:GetItem
-            - dynamodb:PutItem
-            - dynamodb:UpdateItem
-            - dynamodb:DeleteItem
-          Resource:
-            - Fn::GetAtt: [EventsTable, Arn]
-  environment:
-    EVENTS_TABLE: ${self:custom.tableName}
+provider: ${file(./resources/provider.yml)}
 
 functions: ${file(./resources/functions.yml)}
 
-resources:
-  Resources:
-    EventsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: eventId
-            AttributeType: S
-          - AttributeName: eventType
-            AttributeType: S
-          - AttributeName: eventDate
-            AttributeType: S
-          - AttributeName: location
-            AttributeType: S
-          - AttributeName: host
-            AttributeType: S
-        KeySchema:
-          - AttributeName: eventId
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
-        TableName: ${self:custom.tableName}
-        GlobalSecondaryIndexes:
-          - IndexName: EventTypeDateIndex
-            KeySchema:
-              - AttributeName: eventType
-                KeyType: HASH
-              - AttributeName: eventDate
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-          - IndexName: LocationDateIndex
-            KeySchema:
-              - AttributeName: location
-                KeyType: HASH
-              - AttributeName: eventDate
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-          - IndexName: HostIndex
-            KeySchema:
-              - AttributeName: host
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
+resources: ${file(./resources/resources.yml)}
