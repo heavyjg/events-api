@@ -7,7 +7,7 @@ const { get, getAll, save, update, delete_ } = EventsDB();
 
 function handleGetEventResponse(
   response: Response,
-  result: Event | Event[] | undefined
+  result: Event | Event[] | undefined,
 ) {
   if (!result) {
     response.status(404).json({ error: "Event not found" });
