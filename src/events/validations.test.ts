@@ -1,5 +1,4 @@
-import assert from "node:assert";
-import { beforeEach, describe, it } from "node:test";
+import * as assert from "node:assert";
 import type { Event } from "../types";
 import { validateFieldTypes, validateKeys } from "./validations";
 
@@ -37,7 +36,7 @@ describe("validateKeys", () => {
     const result = validateKeys(event, validKeys);
     assert.strictEqual(
       result,
-      "Error: Invalid field 'invalidKey' in request body",
+      "Error: Invalid field 'invalidKey' in request body"
     );
   });
 });
