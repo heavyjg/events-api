@@ -6,6 +6,7 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
+    environment: prod
 
     strategy:
       matrix:
