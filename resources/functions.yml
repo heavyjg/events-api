@@ -12,7 +12,7 @@ createEvent:
             bodyType: "Event"
           400:
             description: "Validation error"
-            bodyType: "String"
+            bodyType: "Error"
           500:
             description: "Internal Error"
             bodyType: "Error"
@@ -43,9 +43,6 @@ getAllEvents:
           200:
             description: "OK"
             bodyType: "Events"
-          400:
-            description: "Validation error"
-            bodyType: "String"
           404:
             description: "Not Found"
             bodyType: "Error"
@@ -64,7 +61,7 @@ updateEvent:
             description: "No content"
           400:
             description: "Validation error"
-            bodyType: "String"
+            bodyType: "Error"
           404:
             description: "Not Found"
             bodyType: "Error"
@@ -83,7 +80,7 @@ deleteEvent:
             description: "No content"
           400:
             description: "Validation error"
-            bodyType: "String"
+            bodyType: "Error"
           404:
             description: "Not Found"
             bodyType: "Error"
