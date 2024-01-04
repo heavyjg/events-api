@@ -5,3 +5,5 @@ node_modules
 .requests
 coverage
 .nyc_output
+swagger
+.webpack
