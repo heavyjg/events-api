@@ -15,11 +15,11 @@
 
 ## Introduction[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#introduction)
 
-**events-api** is a practical and effective tool for managing events, built using modern technologies including Node.js 20, TypeScript, Serverless Framework, and DynamoDB. This combination of technologies ensures a scalable, efficient, and easy-to-maintain API.
+**events-api** is a practical and effective tool for managing events, built using modern technologies including Node.js 18.x, TypeScript, Serverless Framework, and DynamoDB. This combination of technologies ensures a scalable, efficient, and easy-to-maintain API.
 
 Key Features:
 
-- **Built with Node.js 20 and TypeScript**: Offers a stable and scalable backend with the added benefits of TypeScript's strong typing.
+- **Built with Node.js 18 and TypeScript**: Offers a stable and scalable backend with the added benefits of TypeScript's strong typing.
 - **Serverless Framework Integration**: Ensures easy deployment and lower maintenance overhead, making the API cost-effective and scalable.
 - **DynamoDB for Data Storage**: Leverages AWS DynamoDB for reliable and fast data storage, ideal for handling event data.
 - **Event CRUD Operations**: Supports creating, reading, updating, and deleting events with ease.
@@ -36,7 +36,7 @@ This API is a perfect solution for developers looking for a simple yet efficient
 #### Requirements
 
 - [AWS Credentials](https://www.serverless.com/framework/docs/providers/aws/guide/credentials/) ready to go
-- Node.js 20.x
+- Node.js 18.x
 - [Java Runtime Engine (JRE) version 6.x or newer OR docker CLI client](https://www.serverless.com/plugins/serverless-dynamodb-local)
 
 #### Steps
