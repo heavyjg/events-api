@@ -32,6 +32,12 @@ export type Event = {
   status?: string; // Optional current status of the event (scheduled, cancelled, etc.)
 };
 
+export type Error = {
+  error: string;
+};
+
+export type Events = Event[];
+
 export type IScanCommandOutput<T> = Omit<ScanCommandOutput, "Items"> & {
   Items?: T;
 };

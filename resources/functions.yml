@@ -1,6 +1,92 @@
 # Serverless Framework specific syntax
 
-api:
+createEvent:
   handler: src/events/api.handler
   events:
-    - httpApi: "*"
+    - httpApi:
+        method: post
+        path: /events
+        responses:
+          201:
+            description: "Created"
+            bodyType: "Event"
+          400:
+            description: "Validation error"
+            bodyType: "String"
+          500:
+            description: "Internal Error"
+            bodyType: "Error"
+getEvent:
+  handler: src/events/api.handler
+  events:
+    - httpApi:
+        method: get
+        path: /events/{eventId}
+        responses:
+          200:
+            description: "OK"
+            bodyType: "Event"
+          404:
+            description: "Not Found"
+            bodyType: "Error"
+          500:
+            description: "Internal Error"
+            bodyType: "Error"
+
+getAllEvents:
+  handler: src/events/api.handler
+  events:
+    - httpApi:
+        method: get
+        path: /events
+        responses:
+          200:
+            description: "OK"
+            bodyType: "Events"
+          400:
+            description: "Validation error"
+            bodyType: "String"
+          404:
+            description: "Not Found"
+            bodyType: "Error"
+          500:
+            description: "Internal Error"
+            bodyType: "Error"
+
+updateEvent:
+  handler: src/events/api.handler
+  events:
+    - httpApi:
+        method: put
+        path: /events/{eventId}
+        responses:
+          204:
+            description: "No content"
+          400:
+            description: "Validation error"
+            bodyType: "String"
+          404:
+            description: "Not Found"
+            bodyType: "Error"
+          500:
+            description: "Internal Error"
+            bodyType: "Error"
+
+deleteEvent:
+  handler: src/events/api.handler
+  events:
+    - httpApi:
+        method: delete
+        path: /events/{eventId}
+        responses:
+          204:
+            description: "No content"
+          400:
+            description: "Validation error"
+            bodyType: "String"
+          404:
+            description: "Not Found"
+            bodyType: "Error"
+          500:
+            description: "Internal Error"
+            bodyType: "Error"
