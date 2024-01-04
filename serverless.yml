@@ -6,6 +6,7 @@ frameworkVersion: "3"
 custom: ${file(./resources/custom.yml)}
 
 plugins:
+  - serverless-auto-swagger
   - serverless-webpack
   - serverless-offline # used for local execution
   - serverless-esbuild # used for compiling/packaging the Typescript code

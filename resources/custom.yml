@@ -14,8 +14,12 @@ serverless-dynamodb:
         - table: ${self:custom.tableName}
           sources: [./resources/seeds/events.json]
 
-  webpack:
-    webpackConfig: "webpack.config.js" # Name of webpack configuration file
-    includeModules: false # Node modules configuration for packaging
-    packager: "npm" # Packager that will be used to package your external modules
-    excludeFiles: src/**/*.test.ts # Provide a glob for files to ignore
+webpack:
+  webpackConfig: "webpack.config.js" # Name of webpack configuration file
+  includeModules: false # Node modules configuration for packaging
+  packager: "npm" # Packager that will be used to package your external modules
+  excludeFiles: src/**/*.test.ts # Provide a glob for files to ignore
+
+autoswagger:
+  typefiles: ["./src/types.ts"]
+  excludeStages: ["staging", "prod"]
