@@ -183,8 +183,8 @@ describe("POST /events", () => {
 
     assert.strictEqual(response.statusCode, 400);
     assert.strictEqual(
-      response.text,
-      "Error: Missing required fields: eventName",
+      response.body.error,
+      "Missing required fields: eventName",
     );
   });
 
@@ -196,8 +196,8 @@ describe("POST /events", () => {
 
     assert.strictEqual(response.statusCode, 400);
     assert.match(
-      response.text,
-      /Error: .*eventName.*/,
+      response.body.error,
+      /.*eventName.*/,
       "Response text should contain an error message for null eventName",
     );
   });
@@ -239,7 +239,7 @@ describe("POST /events", () => {
 
     assert.strictEqual(response.statusCode, 400);
     assert.strictEqual(
-      response.text,
+      response.body.error,
       "capacity must be a number",
       "Response text should contain an error message for incorrect data type",
     );

@@ -13,7 +13,7 @@ function handleGetEventResponse(
     response.status(404).json({ error: "Event not found" });
   } else if ("error" in result) {
     response.status(500).json({
-      error: "An error occurred while retrieving the event",
+      error: "Internal Server Error",
     });
   } else {
     response.status(200).json(result);
@@ -23,7 +23,7 @@ function handleGetEventResponse(
 export async function getEvent(request: Request, response: Response) {
   const eventId = request.params.eventId;
   if (eventId == null) {
-    response.status(400).send("Error: missing eventId");
+    response.status(400).send({ error: "missing eventId" });
     return;
   }
 
@@ -33,7 +33,7 @@ export async function getEvent(request: Request, response: Response) {
     handleGetEventResponse(response, result);
   } catch (error) {
     console.error(error);
-    response.status(500).send("Internal Server Error");
+    response.status(500).send({ error: "Internal Server Error" });
   }
 }
 
@@ -42,7 +42,7 @@ export async function saveEvent(request: Request, response: Response) {
 
   // Basic validation for request body existence
   if (!reqBody || typeof reqBody !== "object") {
-    response.status(400).send("Error: Invalid request body");
+    response.status(400).send({ error: "Invalid request body" });
     return;
   }
 
@@ -59,20 +59,20 @@ export async function saveEvent(request: Request, response: Response) {
   if (missingFields.length > 0) {
     response
       .status(400)
-      .send(`Error: Missing required fields: ${missingFields.join(", ")}`);
+      .send({ error: `Missing required fields: ${missingFields.join(", ")}` });
     return;
   }
 
   const errorMessage = validateKeys(reqBody, validKeys);
   if (errorMessage) {
-    response.status(400).send(errorMessage);
+    response.status(400).send({ error: errorMessage });
     return;
   }
 
   // Type validation
   const typeErrorMessage = validateFieldTypes(reqBody);
   if (typeErrorMessage) {
-    response.status(400).send(typeErrorMessage);
+    response.status(400).send({ error: typeErrorMessage });
     return;
   }
 
@@ -96,7 +96,7 @@ export async function saveEvent(request: Request, response: Response) {
     response.status(201).json(result);
   } catch (error) {
     console.error(error);
-    response.status(500).send("Internal Server Error");
+    response.status(500).send({ error: "Internal Server Error" });
   }
 }
 
@@ -104,7 +104,7 @@ export async function updateEvent(request: Request, response: Response) {
   const eventId = request.params.eventId;
 
   if (eventId == null) {
-    response.status(400).send("Error: missing eventId");
+    response.status(400).send({ error: "missing eventId" });
     return;
   }
 
@@ -116,7 +116,7 @@ export async function updateEvent(request: Request, response: Response) {
     typeof reqBody !== "object" ||
     Object.keys(reqBody).length === 0
   ) {
-    response.status(400).send("Error: Invalid request body");
+    response.status(400).send({ error: "Invalid request body" });
     return;
   }
 
@@ -146,11 +146,11 @@ export async function updateEvent(request: Request, response: Response) {
     response.status(204).send();
   } catch (error) {
     if ((error as Error).message === "Event not found") {
-      response.status(404).send("Event not found");
+      response.status(404).send({ error: "Event not found" });
     } else
       response
         .status(500)
-        .send("Internal Server Error, " + (error as Error)?.message);
+        .send({ error: "Internal Server Error, " + (error as Error)?.message });
   }
 }
 
@@ -161,7 +161,7 @@ export async function getAllEvents(request: Request, response: Response) {
     handleGetEventResponse(response, result);
   } catch (error) {
     console.error(error);
-    response.status(500).send("Internal Server Error");
+    response.status(500).send({ error: "Internal Server Error" });
   }
 }
 
@@ -169,23 +169,23 @@ export async function deleteEvent(request: Request, response: Response) {
   const eventId = request.params.eventId;
 
   if (!eventId) {
-    response.status(400).send("Error: missing eventId");
+    response.status(400).send({ error: "missing eventId" });
     return;
   }
 
   try {
     await delete_(eventId);
-    response
-      .status(204)
-      .send(`Event with eventId ${eventId} successfully deleted`);
+    response.status(204).send();
   } catch (error) {
     const errorMessage = (error as Error).message;
 
     if (errorMessage === "Event not found or already deleted") {
-      response.status(404).send("Error: Event not found");
+      response.status(404).send({ error: "Event not found" });
     } else {
       console.error(error);
-      response.status(500).send("Internal Server Error, " + errorMessage);
+      response
+        .status(500)
+        .send({ error: "Internal Server Error, " + errorMessage });
     }
   }
 }
