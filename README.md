@@ -5,8 +5,8 @@
 
 </h1>
 
-[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com) [![dependency - TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=TypeScript&logoColor=white)](https://www.npmjs.com/package/TypeScript)
-[![Build status](https://github.com/heavyjg/events-api/actions/workflows/deploy.yml/badge.svg)](https://github.com/heavyjg/events-api/actions?query=main) ![Known Vulnerabilities](https://snyk.io/test/github/heavyjg/events-api/badge.svg)
+[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com) [![dependency - TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=TypeScript&logoColor=white)](https://www.npmjs.com/package/TypeScript)  
+[![Build status](https://github.com/heavyjg/events-api/actions/workflows/deploy.yml/badge.svg)](https://github.com/heavyjg/events-api/actions?query=main) ![Known Vulnerabilities](https://snyk.io/test/github/heavyjg/events-api/badge.svg)  
 [![Maintainability](https://api.codeclimate.com/v1/badges/c3923e6b729e5159e3d3/maintainability)](https://codeclimate.com/github/heavyjg/events-api/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/c3923e6b729e5159e3d3/test_coverage)](https://codeclimate.com/github/heavyjg/events-api/test_coverage)
 
 ---
