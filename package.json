@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.481.0",
-    "@aws-sdk/lib-dynamodb": "^3.481.0",
+    "@aws-sdk/lib-dynamodb": "^3.484.0",
     "aws-dynamodb-local": "^0.0.11",
     "express": "^4.18.2",
     "serverless-dynamodb": "^0.2.47",
