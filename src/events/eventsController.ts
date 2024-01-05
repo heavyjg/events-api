@@ -24,6 +24,7 @@ export async function getEvent(request: Request, response: Response) {
   const eventId = request.params.eventId;
   if (eventId == null) {
     response.status(400).send({ error: "missing eventId" });
+
     return;
   }
 

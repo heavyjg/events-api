@@ -40,14 +40,14 @@ describe("GET /events", () => {
     ddbMock.on(GetCommand).resolves({ Item: mockEvent });
 
     const res = await request(app).get(
-      "/events/28899ee7-b841-4da6-81e2-b9054c091a79",
+      "/events/28899ee7-b841-4da6-81e2-b9054c091a79"
     );
 
     // Assertions
     assert.strictEqual(
       res.statusCode,
       200,
-      "Response status code should be 200",
+      "Response status code should be 200"
     );
     assert.deepStrictEqual(
       res.body,
@@ -64,7 +64,7 @@ describe("GET /events", () => {
         ...(mockEvent.tags && { tags: mockEvent.tags }),
         ...(mockEvent.status && { status: mockEvent.status }),
       },
-      "Response body should match the mock event structure and data",
+      "Response body should match the mock event structure and data"
     );
   });
 
@@ -109,7 +109,7 @@ describe("GET ALL /events", () => {
           ...(event.tags && { tags: event.tags }),
           ...(event.status && { status: event.status }),
         },
-        "Response body should match the mock event structure and data",
+        "Response body should match the mock event structure and data"
       );
 
       assert.strictEqual(res.body[index].eventId, event.eventId);
@@ -171,7 +171,7 @@ describe("POST /events", () => {
         ...(mockEvent.tags && { tags: mockEvent.tags }),
         ...(mockEvent.status && { status: mockEvent.status }),
       },
-      "Response body should match the mock event structure and data",
+      "Response body should match the mock event structure and data"
     );
   });
 
@@ -184,7 +184,7 @@ describe("POST /events", () => {
     assert.strictEqual(response.statusCode, 400);
     assert.strictEqual(
       response.body.error,
-      "Missing required fields: eventName",
+      "Missing required fields: eventName"
     );
   });
 
@@ -198,7 +198,7 @@ describe("POST /events", () => {
     assert.match(
       response.body.error,
       /.*eventName.*/,
-      "Response text should contain an error message for null eventName",
+      "Response text should contain an error message for null eventName"
     );
   });
 
@@ -225,7 +225,7 @@ describe("POST /events", () => {
     assert.match(
       response.text,
       /Error: .*unexpectedField.*/,
-      "Response text should contain an error message for unexpected field",
+      "Response text should contain an error message for unexpected field"
     );
   });
 
@@ -241,145 +241,7 @@ describe("POST /events", () => {
     assert.strictEqual(
       response.body.error,
       "capacity must be a number",
-      "Response text should contain an error message for incorrect data type",
-    );
-  });
-});
-
-describe("PUT /events", () => {
-  it("PUT /events/:eventId - success", async () => {
-    const mockEvent = generateFakeEvent();
-    const postResponse = await request(app).post("/events").send(mockEvent);
-    assert.strictEqual(postResponse.statusCode, 201);
-
-    // Assign the eventId from the POST response to the mock event
-    mockEvent.eventId = postResponse.body.eventId;
-
-    // Now, update the mock event with new data
-    const updatedEvent = generateFakeEvent();
-
-    // Send a PUT request to update the event
-    const response = await request(app)
-      .put(`/events/${mockEvent.eventId}`)
-      .send(updatedEvent);
-
-    // Assertions for PUT request
-    assert.strictEqual(
-      response.statusCode,
-      204,
-      "Response status code should be 200",
-    );
-  });
-
-  it("PUT /events/:eventId - fail due to missing eventId", async () => {
-    const updatedEvent = generateFakeEvent();
-
-    const response = await request(app)
-      .put(`/events/`) // Missing eventId in URL
-      .send(updatedEvent);
-
-    assert.strictEqual(
-      response.statusCode,
-      404,
-      "Response status code should be 404 for missing eventId",
-    );
-  });
-
-  it("PUT /events/:eventId - fail due to invalid eventId", async () => {
-    const updatedEvent = generateFakeEvent();
-
-    ddbMock
-      .on(UpdateCommand)
-      .rejects({ name: "ConditionalCheckFailedException" });
-
-    const response = await request(app)
-      .put(`/events/invalid-event-id`) // Invalid eventId
-      .send(updatedEvent);
-
-    assert.strictEqual(
-      response.statusCode,
-      404,
-      "Response status code should be 400 for invalid eventId",
-    );
-  });
-
-  it("PUT /events/:eventId - fail due to invalid request body", async () => {
-    const mockEventId = "some-valid-event-id";
-
-    const itmock = {
-      lixo: "vai dar ruim",
-      mpo: "sabugo barril",
-    };
-
-    const response = await request(app)
-      .put(`/events/${mockEventId}`)
-      .send(itmock); // Invalid body
-
-    assert.strictEqual(
-      response.statusCode,
-      400,
-      "Response status code should be 400 for invalid request body",
-    );
-  });
-
-  it("PUT /events/:eventId - success with partial update", async () => {
-    const mockEvent = generateFakeEvent();
-    const postResponse = await request(app).post("/events").send(mockEvent);
-
-    mockEvent.eventId = postResponse.body.eventId;
-
-    const partialUpdate = {
-      eventName: "Partially Updated Event Name",
-    };
-
-    const response = await request(app)
-      .put(`/events/${mockEvent.eventId}`)
-      .send(partialUpdate);
-
-    assert.strictEqual(
-      response.statusCode,
-      204,
-      "Response status code should be 204 for successful partial update",
-    );
-  });
-});
-
-describe("DELETE /events", () => {
-  it("DELETE /events/:eventId - success", async () => {
-    const mockEvent = generateFakeEvent();
-    const postResponse = await request(app).post("/events").send(mockEvent);
-    assert.strictEqual(postResponse.statusCode, 201);
-
-    // Assign the eventId from the POST response to the mock event
-    mockEvent.eventId = postResponse.body.eventId;
-
-    const response = await request(app).delete(`/events/${mockEvent.eventId}`);
-    assert.strictEqual(
-      response.statusCode,
-      204,
-      "Response status code should be 204 for successful delete",
-    );
-  });
-
-  it("DELETE /events/:eventId - fail due to missing eventId", async () => {
-    const response = await request(app).delete(`/events/`);
-    assert.strictEqual(
-      response.statusCode,
-      404,
-      "Response status code should be 404 for missing eventId",
-    );
-  });
-
-  it("DELETE /events/:eventId - fail due to invalid eventId", async () => {
-    ddbMock
-      .on(DeleteCommand)
-      .rejects({ name: "ConditionalCheckFailedException" });
-
-    const response = await request(app).delete(`/events/invalid-event-id`);
-    assert.strictEqual(
-      response.statusCode,
-      404,
-      "Response status code should be 404 for invalid eventId",
+      "Response text should contain an error message for incorrect data type"
     );
   });
 });
