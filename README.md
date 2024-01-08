@@ -29,6 +29,16 @@ Key Features:
 
 This API is a perfect solution for developers looking for a simple yet efficient way to handle event management in their applications, with the backing of robust and modern technologies.
 
+### Serverless plugins
+
+This project uses the following Serverless plugins:
+
+- **serverless-offline**: Simulates AWS Lambda and API Gateway locally, without the need to manage any servers.
+- **serverless-dynamodb**: Provides a local DynamoDB instance for testing your application's DynamoDB tables. Requires JRE 6 or Dynamodb Docker image.
+- **serverless-webpack**: Bundles your code and dependencies into a single file to be deployed.
+- **serverless-auto-swagger**: Generates Swagger documentation for your API, utilizes functions.yml response definitions to populate types.
+- **serverless-esbuild**: Enables Typescript in your serverless project.
+
 ---
 
 ## Installation[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#installation)
@@ -65,7 +75,10 @@ serverless
 
 ## Deploy[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#deploy)
 
-Now you can deploy locally with:
+To run the application in localhost you must have:
+
+- Completed the [Installation](#installation) steps
+- JRE setup (6.x or newer)
 
 ```
 serverless offline start

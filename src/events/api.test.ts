@@ -14,6 +14,7 @@ import { faker } from "@faker-js/faker";
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
+//Generates fake Events with faker.js
 const generateFakeEvent = (): Event => {
   return {
     eventId: faker.string.uuid(),
@@ -30,6 +31,10 @@ const generateFakeEvent = (): Event => {
   };
 };
 
+//Reset database mock before each test
+//Not every method needs active mocking
+//DdbMock will return same object received as parameter
+//Lots of tests can leverage that and ignore the mocked database
 beforeEach(() => {
   ddbMock.reset();
 });
@@ -37,17 +42,18 @@ beforeEach(() => {
 describe("GET /events", () => {
   it("GET /events/:eventId - success", async () => {
     const mockEvent = generateFakeEvent();
+    //Mock getCommand response to a mocked event
     ddbMock.on(GetCommand).resolves({ Item: mockEvent });
 
     const res = await request(app).get(
-      "/events/28899ee7-b841-4da6-81e2-b9054c091a79",
+      "/events/28899ee7-b841-4da6-81e2-b9054c091a79"
     );
 
     // Assertions
     assert.strictEqual(
       res.statusCode,
       200,
-      "Response status code should be 200",
+      "Response status code should be 200"
     );
     assert.deepStrictEqual(
       res.body,
@@ -64,11 +70,12 @@ describe("GET /events", () => {
         ...(mockEvent.tags && { tags: mockEvent.tags }),
         ...(mockEvent.status && { status: mockEvent.status }),
       },
-      "Response body should match the mock event structure and data",
+      "Response body should match the mock event structure and data"
     );
   });
 
   it("GET /events/:eventId - not found", async () => {
+    //Mocks db returning undefined as response
     ddbMock.on(GetCommand).resolves({
       Item: undefined,
     });
@@ -85,6 +92,7 @@ describe("GET ALL /events", () => {
     // Create a list of mock events
     const mockEvents = Array.from({ length: 5 }, () => generateFakeEvent());
 
+    //Mocks ScanCommand to return mocked list of events
     ddbMock.on(ScanCommand).resolves({ Items: mockEvents });
 
     const res = await request(app).get("/events");
@@ -109,7 +117,7 @@ describe("GET ALL /events", () => {
           ...(event.tags && { tags: event.tags }),
           ...(event.status && { status: event.status }),
         },
-        "Response body should match the mock event structure and data",
+        "Response body should match the mock event structure and data"
       );
 
       assert.strictEqual(res.body[index].eventId, event.eventId);
@@ -137,6 +145,7 @@ describe("GET ALL /events", () => {
   });
 
   it("GET ALL /events - handle empty list", async () => {
+    //Mock scanCommand to return empty list of items
     ddbMock.on(ScanCommand).resolves({ Items: [] });
 
     const response = await request(app).get("/events");
@@ -148,6 +157,7 @@ describe("GET ALL /events", () => {
 
 describe("POST /events", () => {
   it("POST /events - success", async () => {
+    //generate fake event with faker.js
     const mockEvent = generateFakeEvent();
 
     const response = await request(app).post("/events").send(mockEvent);
@@ -171,26 +181,32 @@ describe("POST /events", () => {
         ...(mockEvent.tags && { tags: mockEvent.tags }),
         ...(mockEvent.status && { status: mockEvent.status }),
       },
-      "Response body should match the mock event structure and data",
+      "Response body should match the mock event structure and data"
     );
   });
 
   it("POST /events - fail", async () => {
+    // Generate fake data with faker.js
     const mockEvent = generateFakeEvent();
-    mockEvent.eventName = ""; // Remove a mandatory field
+
+    // Remove a mandatory field to cause error
+    mockEvent.eventName = "";
 
     const response = await request(app).post("/events").send(mockEvent);
 
     assert.strictEqual(response.statusCode, 400);
     assert.strictEqual(
       response.body.error,
-      "Missing required fields: eventName",
+      "Missing required fields: eventName"
     );
   });
 
   it("POST /events - fail due to empty mandatory field", async () => {
+    // Generate fake data with faker.js
     const mockEvent = generateFakeEvent();
-    mockEvent.eventName = ""; // Set a mandatory field to empty
+
+    // Set a mandatory field to empty to cause error
+    mockEvent.eventName = "";
 
     const response = await request(app).post("/events").send(mockEvent);
 
@@ -198,14 +214,17 @@ describe("POST /events", () => {
     assert.match(
       response.body.error,
       /.*eventName.*/,
-      "Response text should contain an error message for null eventName",
+      "Response text should contain an error message for null eventName"
     );
   });
 
   it("POST /events - success without optional fields", async () => {
+    // Generate fake data with faker.js
     const mockEvent = generateFakeEvent();
-    delete mockEvent.description; // Remove an optional field
-    delete mockEvent.capacity; // Remove another optional field
+
+    // Remove optional fields, should not cause error
+    delete mockEvent.description;
+    delete mockEvent.capacity;
 
     const response = await request(app).post("/events").send(mockEvent);
 
@@ -214,9 +233,10 @@ describe("POST /events", () => {
   });
 
   it("POST /events - fail due to unexpected fields", async () => {
+    // Generate fake data with faker.js
     const mockEvent = generateFakeEvent();
 
-    //@ts-expect-error iting api behavior on unexpected field
+    //@ts-expect-error test api behavior on unexpected field, should cause error344
     mockEvent.unexpectedField = "unexpected"; // Add an unexpected field
 
     const response = await request(app).post("/events").send(mockEvent);
@@ -225,11 +245,12 @@ describe("POST /events", () => {
     assert.match(
       response.text,
       /Error: .*unexpectedField.*/,
-      "Response text should contain an error message for unexpected field",
+      "Response text should contain an error message for unexpected field"
     );
   });
 
   it("POST /events - fail due to incorrect data types", async () => {
+    // Generate fake data with faker.js
     const mockEvent = generateFakeEvent();
 
     //@ts-expect-error forcing a string on a number field to it api behavior
@@ -241,14 +262,16 @@ describe("POST /events", () => {
     assert.strictEqual(
       response.body.error,
       "capacity must be a number",
-      "Response text should contain an error message for incorrect data type",
+      "Response text should contain an error message for incorrect data type"
     );
   });
 });
 
 describe("PUT /events", () => {
   it("PUT /events/:eventId - success", async () => {
+    // Generate fake data with faker.js
     const mockEvent = generateFakeEvent();
+
     const postResponse = await request(app).post("/events").send(mockEvent);
     assert.strictEqual(postResponse.statusCode, 201);
 
@@ -267,11 +290,12 @@ describe("PUT /events", () => {
     assert.strictEqual(
       response.statusCode,
       204,
-      "Response status code should be 200",
+      "Response status code should be 200"
     );
   });
 
   it("PUT /events/:eventId - fail due to missing eventId", async () => {
+    // Generate fake data with faker.js
     const updatedEvent = generateFakeEvent();
 
     const response = await request(app)
@@ -281,13 +305,15 @@ describe("PUT /events", () => {
     assert.strictEqual(
       response.statusCode,
       404,
-      "Response status code should be 404 for missing eventId",
+      "Response status code should be 404 for missing eventId"
     );
   });
 
   it("PUT /events/:eventId - fail due to invalid eventId", async () => {
+    // Generate fake data with faker.js
     const updatedEvent = generateFakeEvent();
 
+    //Mocks database to always return exception on UpdateCommand
     ddbMock
       .on(UpdateCommand)
       .rejects({ name: "ConditionalCheckFailedException" });
@@ -299,16 +325,17 @@ describe("PUT /events", () => {
     assert.strictEqual(
       response.statusCode,
       404,
-      "Response status code should be 400 for invalid eventId",
+      "Response status code should be 400 for invalid eventId"
     );
   });
 
   it("PUT /events/:eventId - fail due to invalid request body", async () => {
     const mockEventId = "some-valid-event-id";
 
+    //creating a totally invalid body request
     const itmock = {
-      lixo: "vai dar ruim",
-      mpo: "sabugo barril",
+      lixo: "wierd field",
+      mpo: "bomb property",
     };
 
     const response = await request(app)
@@ -318,11 +345,12 @@ describe("PUT /events", () => {
     assert.strictEqual(
       response.statusCode,
       400,
-      "Response status code should be 400 for invalid request body",
+      "Response status code should be 400 for invalid request body"
     );
   });
 
   it("PUT /events/:eventId - success with partial update", async () => {
+    // Generate fake data with faker.js
     const mockEvent = generateFakeEvent();
     const postResponse = await request(app).post("/events").send(mockEvent);
 
@@ -339,25 +367,29 @@ describe("PUT /events", () => {
     assert.strictEqual(
       response.statusCode,
       204,
-      "Response status code should be 204 for successful partial update",
+      "Response status code should be 204 for successful partial update"
     );
   });
 });
 
 describe("DELETE /events", () => {
   it("DELETE /events/:eventId - success", async () => {
+    // Generate fake data with faker.js
     const mockEvent = generateFakeEvent();
+
+    // post data to delete
     const postResponse = await request(app).post("/events").send(mockEvent);
     assert.strictEqual(postResponse.statusCode, 201);
 
     // Assign the eventId from the POST response to the mock event
     mockEvent.eventId = postResponse.body.eventId;
 
+    //Success delete
     const response = await request(app).delete(`/events/${mockEvent.eventId}`);
     assert.strictEqual(
       response.statusCode,
       204,
-      "Response status code should be 204 for successful delete",
+      "Response status code should be 204 for successful delete"
     );
   });
 
@@ -366,11 +398,12 @@ describe("DELETE /events", () => {
     assert.strictEqual(
       response.statusCode,
       404,
-      "Response status code should be 404 for missing eventId",
+      "Response status code should be 404 for missing eventId"
     );
   });
 
   it("DELETE /events/:eventId - fail due to invalid eventId", async () => {
+    //Mock database to raise exception on DeleteCommand
     ddbMock
       .on(DeleteCommand)
       .rejects({ name: "ConditionalCheckFailedException" });
@@ -379,7 +412,7 @@ describe("DELETE /events", () => {
     assert.strictEqual(
       response.statusCode,
       404,
-      "Response status code should be 404 for invalid eventId",
+      "Response status code should be 404 for invalid eventId"
     );
   });
 });
