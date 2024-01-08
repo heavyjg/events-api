@@ -1,6 +1,6 @@
 # Serverless Framework specific syntax
 
-createEvent:
+eventApi:
   handler: src/events/api.handler
   events:
     - httpApi:
@@ -17,47 +17,8 @@ createEvent:
           500:
             description: "Internal Error"
             bodyType: "Error"
-getEvent:
-  handler: src/events/api.handler
-  events:
     - httpApi:
-        method: get
-        path: /events/{eventId}
-        responses:
-          default: ""
-          200:
-            description: "OK"
-            bodyType: "Event"
-          404:
-            description: "Not Found"
-            bodyType: "Error"
-          500:
-            description: "Internal Error"
-            bodyType: "Error"
-
-getAllEvents:
-  handler: src/events/api.handler
-  events:
-    - httpApi:
-        method: get
-        path: /events
-        responses:
-          default: ""
-          200:
-            description: "OK"
-            bodyType: "Events"
-          404:
-            description: "Not Found"
-            bodyType: "Error"
-          500:
-            description: "Internal Error"
-            bodyType: "Error"
-
-updateEvent:
-  handler: src/events/api.handler
-  events:
-    - httpApi:
-        method: put
+        method: delete
         path: /events/{eventId}
         responses:
           default: ""
@@ -72,12 +33,36 @@ updateEvent:
           500:
             description: "Internal Error"
             bodyType: "Error"
-
-deleteEvent:
-  handler: src/events/api.handler
-  events:
     - httpApi:
-        method: delete
+        method: get
+        path: /events/{eventId}
+        responses:
+          default: ""
+          200:
+            description: "OK"
+            bodyType: "Event"
+          404:
+            description: "Not Found"
+            bodyType: "Error"
+          500:
+            description: "Internal Error"
+            bodyType: "Error"
+    - httpApi:
+        method: get
+        path: /events
+        responses:
+          default: ""
+          200:
+            description: "OK"
+            bodyType: "Events"
+          404:
+            description: "Not Found"
+            bodyType: "Error"
+          500:
+            description: "Internal Error"
+            bodyType: "Error"
+    - httpApi:
+        method: put
         path: /events/{eventId}
         responses:
           default: ""
