@@ -20,7 +20,7 @@
     "serverless-http": "^3.1.1",
     "serverless-webpack": "^5.13.0",
     "uuid": "^9.0.1",
-    "webpack": "^5.89.0"
+    "webpack": "^5.90.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.3.1",
